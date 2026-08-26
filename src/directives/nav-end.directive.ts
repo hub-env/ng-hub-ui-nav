@@ -18,4 +18,3 @@ export class HubNavEndDirective {
 	/** Reference to the projected template. */
 	readonly template = inject(TemplateRef<HubNavEndTemplateContext>);
 }
-

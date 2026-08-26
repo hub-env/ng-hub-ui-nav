@@ -274,8 +274,7 @@ nav {
 	align-self: stretch;
 	box-sizing: border-box;
 	padding-bottom: var(--hub-nav-padding-y, 0.5rem);
-	border-bottom: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid)
-		var(--hub-nav-border-color, #dee2e6);
+	border-bottom: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid) var(--hub-nav-border-color, #dee2e6);
 	margin-bottom: var(--hub-nav-gap, 0.25rem);
 }
 
@@ -285,8 +284,7 @@ nav {
 	box-sizing: border-box;
 	margin-top: auto;
 	padding-top: var(--hub-nav-padding-y, 0.5rem);
-	border-top: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid)
-		var(--hub-nav-border-color, #dee2e6);
+	border-top: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid) var(--hub-nav-border-color, #dee2e6);
 }
 
 :host(.hub-nav--horizontal) .hub-nav-slot--end {

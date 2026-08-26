@@ -1,44 +1,44 @@
 {
-  "name": "ng-hub-ui-nav",
-  "version": "22.11.0",
-  "license": "MIT",
-  "description": "A flexible, accessible, and customizable navigation component for Angular 21, part of the ng-hub-ui family.",
-  "author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/carlos-morcillo/ng-hub-ui-nav.git"
-  },
-  "bugs": {
-    "url": "https://github.com/carlos-morcillo/ng-hub-ui-nav/issues"
-  },
-  "homepage": "https://hubui.dev/",
-  "keywords": [
-    "angular",
-    "navigation",
-    "navbar",
-    "sidebar",
-    "menu",
-    "dropdown",
-    "ui-component",
-    "angular-library",
-    "ng-hub-ui",
-    "typescript",
-    "signals",
-    "angular21"
-  ],
-  "peerDependencies": {
-    "@angular/common": ">=21.0.0",
-    "@angular/core": ">=21.0.0",
-    "@angular/router": ">=21.0.0",
-    "ng-hub-ui-utils": ">=22.8.1"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false,
-  "module": "fesm2022/ng-hub-ui-nav.mjs",
-  "typings": "types/ng-hub-ui-nav.d.ts"
+	"name": "ng-hub-ui-nav",
+	"version": "22.11.0",
+	"license": "MIT",
+	"description": "A flexible, accessible, and customizable navigation component for Angular 21, part of the ng-hub-ui family.",
+	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-nav.git"
+	},
+	"bugs": {
+		"url": "https://github.com/carlos-morcillo/ng-hub-ui-nav/issues"
+	},
+	"homepage": "https://hubui.dev/",
+	"keywords": [
+		"angular",
+		"navigation",
+		"navbar",
+		"sidebar",
+		"menu",
+		"dropdown",
+		"ui-component",
+		"angular-library",
+		"ng-hub-ui",
+		"typescript",
+		"signals",
+		"angular21"
+	],
+	"peerDependencies": {
+		"@angular/common": ">=21.0.0",
+		"@angular/core": ">=21.0.0",
+		"@angular/router": ">=21.0.0",
+		"ng-hub-ui-utils": ">=22.8.1"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"sideEffects": false,
+	"module": "fesm2022/ng-hub-ui-nav.mjs",
+	"typings": "types/ng-hub-ui-nav.d.ts"
 }

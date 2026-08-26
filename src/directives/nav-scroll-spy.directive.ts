@@ -162,14 +162,11 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		}
 
 		const topOffset = this.offset();
-		this.observer = new IntersectionObserver(
-			(entries) => this.handleObserverEntries(entries),
-			{
-				root: null,
-				rootMargin: `-${topOffset}px 0px -55% 0px`,
-				threshold: [0.05, 0.2, 0.4, 0.6, 0.8]
-			}
-		);
+		this.observer = new IntersectionObserver((entries) => this.handleObserverEntries(entries), {
+			root: null,
+			rootMargin: `-${topOffset}px 0px -55% 0px`,
+			threshold: [0.05, 0.2, 0.4, 0.6, 0.8]
+		});
 
 		sections.forEach((section) => this.observer?.observe(section));
 		this.observeScrollEnd();
@@ -225,16 +222,14 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		};
 		const events: Array<keyof WindowEventMap> = ['wheel', 'touchmove', 'keydown'];
 
-		this.zone.runOutsideAngular(() =>
-			events.forEach((name) => window.addEventListener(name, release, { passive: true }))
-		);
+		this.zone.runOutsideAngular(() => events.forEach((name) => window.addEventListener(name, release, { passive: true })));
 		this.detachIntent = () => events.forEach((name) => window.removeEventListener(name, release));
 	}
 
 	private getSectionElements(): HTMLElement[] {
-		return Array.from(
-			this.el.nativeElement.querySelectorAll(this.sectionSelector())
-		).filter((node): node is HTMLElement => node instanceof HTMLElement);
+		return Array.from(this.el.nativeElement.querySelectorAll(this.sectionSelector())).filter(
+			(node): node is HTMLElement => node instanceof HTMLElement
+		);
 	}
 
 	private getSectionId(element: HTMLElement): string | null {
@@ -283,9 +278,7 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 
 		const chosen = this.isScrolledToEnd()
 			? sections[sections.length - 1]
-			: [...this.intersecting].sort(
-					(a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
-				)[0];
+			: [...this.intersecting].sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
 
 		if (!chosen) {
 			return;
@@ -333,4 +326,3 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		return (document.scrollingElement as HTMLElement | null) ?? null;
 	}
 }
-

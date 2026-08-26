@@ -49,14 +49,15 @@
 			</ng-template>
 
 			<!-- Children: accordion (inline), flyout/dropdown (positioned), or panel (external) -->
-			@if (hasChildren(item) && isExpanded(item) && getItemExpandMode(item) !== 'panel' && !shouldRenderDropdownInOverlay(item)) {
+			@if (
+				hasChildren(item) &&
+				isExpanded(item) &&
+				getItemExpandMode(item) !== 'panel' &&
+				!shouldRenderDropdownInOverlay(item)
+			) {
 				@if (getItemExpandMode(item) === 'accordion') {
 					<!-- Accordion: children expand inline with indentation -->
-					<div
-						class="hub-nav-accordion"
-						role="group"
-						[style.padding-left]="'var(--hub-nav-accordion-indent, 1rem)'"
-					>
+					<div class="hub-nav-accordion" role="group" [style.padding-left]="'var(--hub-nav-accordion-indent, 1rem)'">
 						<hub-nav-item-list
 							[items]="item.children!"
 							[depth]="depth() + 1"

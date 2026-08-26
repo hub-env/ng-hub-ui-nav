@@ -23,20 +23,33 @@
 //
 // scss-docs-start hub-nav-theme
 @mixin hub-nav-theme(
-	$accent: null,             // --hub-nav-accent (active indicator + hover accents)
-	$bg: null,                 // --hub-nav-bg (bar surface)
-	$color: null,              // --hub-nav-color (bar text)
-	$border-color: null,       // --hub-nav-border-color
-	$gap: null,                // --hub-nav-gap (spacing between items)
-	$padding-x: null,          // --hub-nav-padding-x
-	$padding-y: null,          // --hub-nav-padding-y
-	$item-color: null,         // --hub-nav-item-color
-	$item-active-bg: null,     // --hub-nav-item-active-bg
-	$item-active-color: null,  // --hub-nav-item-active-color
-	$item-border-radius: null, // --hub-nav-item-border-radius
-	$item-font-size: null,     // --hub-nav-item-font-size
-	$item-padding-x: null,     // --hub-nav-item-padding-x
-	$item-padding-y: null      // --hub-nav-item-padding-y
+	$accent: null,
+	// --hub-nav-accent (active indicator + hover accents)
+	$bg: null,
+	// --hub-nav-bg (bar surface)
+	$color: null,
+	// --hub-nav-color (bar text)
+	$border-color: null,
+	// --hub-nav-border-color
+	$gap: null,
+	// --hub-nav-gap (spacing between items)
+	$padding-x: null,
+	// --hub-nav-padding-x
+	$padding-y: null,
+	// --hub-nav-padding-y
+	$item-color: null,
+	// --hub-nav-item-color
+	$item-active-bg: null,
+	// --hub-nav-item-active-bg
+	$item-active-color: null,
+	// --hub-nav-item-active-color
+	$item-border-radius: null,
+	// --hub-nav-item-border-radius
+	$item-font-size: null,
+	// --hub-nav-item-font-size
+	$item-padding-x: null,
+	// --hub-nav-item-padding-x
+	$item-padding-y: null // --hub-nav-item-padding-y
 ) {
 	@if $accent != null {
 		--hub-nav-accent: #{$accent};

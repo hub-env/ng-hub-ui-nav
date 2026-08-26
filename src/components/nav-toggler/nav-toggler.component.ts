@@ -76,7 +76,9 @@ import { HUB_NAV_DEFAULT_LABELS } from '../../models/nav-labels.model';
 				height: 2px;
 				background-color: currentColor;
 				border-radius: 1px;
-				transition: transform 0.3s ease, opacity 0.3s ease;
+				transition:
+					transform 0.3s ease,
+					opacity 0.3s ease;
 				transform-origin: center;
 			}
 

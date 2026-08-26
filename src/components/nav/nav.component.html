@@ -3,26 +3,17 @@
 	@if (isCollapsed()) {
 		@if (startTemplate()) {
 			<div class="hub-nav-slot hub-nav-slot--start">
-				<ng-container
-					[ngTemplateOutlet]="startTemplate()!"
-					[ngTemplateOutletContext]="startContext()"
-				/>
+				<ng-container [ngTemplateOutlet]="startTemplate()!" [ngTemplateOutletContext]="startContext()" />
 			</div>
 		}
 
 		@if (endTemplate()) {
 			<div class="hub-nav-slot hub-nav-slot--end">
-				<ng-container
-					[ngTemplateOutlet]="endTemplate()!"
-					[ngTemplateOutletContext]="endContext()"
-				/>
+				<ng-container [ngTemplateOutlet]="endTemplate()!" [ngTemplateOutletContext]="endContext()" />
 			</div>
 		}
 
-		<hub-nav-toggler
-			[isOpen]="isMobileOpen()"
-			(toggle)="onMobileToggle()"
-		/>
+		<hub-nav-toggler [isOpen]="isMobileOpen()" (toggle)="onMobileToggle()" />
 	}
 
 	<!-- Desktop horizontal navigation: split into two explicit rows -->
@@ -30,10 +21,7 @@
 		<div class="hub-nav__horizontal-top-row">
 			@if (startTemplate()) {
 				<div class="hub-nav-slot hub-nav-slot--start">
-					<ng-container
-						[ngTemplateOutlet]="startTemplate()!"
-						[ngTemplateOutletContext]="startContext()"
-					/>
+					<ng-container [ngTemplateOutlet]="startTemplate()!" [ngTemplateOutletContext]="startContext()" />
 				</div>
 			}
 
@@ -54,10 +42,7 @@
 
 			@if (endTemplate()) {
 				<div class="hub-nav-slot hub-nav-slot--end">
-					<ng-container
-						[ngTemplateOutlet]="endTemplate()!"
-						[ngTemplateOutletContext]="endContext()"
-					/>
+					<ng-container [ngTemplateOutlet]="endTemplate()!" [ngTemplateOutletContext]="endContext()" />
 				</div>
 			}
 		</div>
@@ -93,10 +78,7 @@
 				<!-- Start slot in vertical desktop mode: constrained to the primary column only -->
 				@if (startTemplate()) {
 					<div class="hub-nav-slot hub-nav-slot--start">
-						<ng-container
-							[ngTemplateOutlet]="startTemplate()!"
-							[ngTemplateOutletContext]="startContext()"
-						/>
+						<ng-container [ngTemplateOutlet]="startTemplate()!" [ngTemplateOutletContext]="startContext()" />
 					</div>
 				}
 				<hub-nav-item-list
@@ -115,10 +97,7 @@
 				<!-- End slot in vertical desktop mode: anchored to the bottom of the primary column -->
 				@if (endTemplate()) {
 					<div class="hub-nav-slot hub-nav-slot--end">
-						<ng-container
-							[ngTemplateOutlet]="endTemplate()!"
-							[ngTemplateOutletContext]="endContext()"
-						/>
+						<ng-container [ngTemplateOutlet]="endTemplate()!" [ngTemplateOutletContext]="endContext()" />
 					</div>
 				}
 			</div>

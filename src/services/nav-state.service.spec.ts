@@ -179,9 +179,7 @@ describe('HubNavStateService', () => {
 					id: 'guides',
 					label: 'Guides',
 					type: 'dropdown',
-					children: [
-						{ id: 'routing', label: 'Routing', type: 'link', route: '/docs/routing' }
-					]
+					children: [{ id: 'routing', label: 'Routing', type: 'link', route: '/docs/routing' }]
 				}
 			]
 		};
@@ -190,9 +188,7 @@ describe('HubNavStateService', () => {
 			id: 'components',
 			label: 'Components',
 			type: 'dropdown',
-			children: [
-				{ id: 'buttons', label: 'Buttons', type: 'link', route: '/components/buttons' }
-			]
+			children: [{ id: 'buttons', label: 'Buttons', type: 'link', route: '/components/buttons' }]
 		};
 
 		it('should start with empty panel stack', () => {
@@ -504,9 +500,7 @@ describe('HubNavStateService', () => {
 				children: siblings
 			};
 
-			expect(
-				service.isItemActiveAmongSiblings(group, [group], '/products/categories')
-			).toBe(true);
+			expect(service.isItemActiveAmongSiblings(group, [group], '/products/categories')).toBe(true);
 		});
 	});
 
@@ -606,7 +600,6 @@ describe('HubNavStateService', () => {
 			expect(service.labels().goBack).toBe('Go back');
 		});
 	});
-
 });
 
 describe('HubNavStateService with the shared translation dictionary', () => {

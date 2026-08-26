@@ -87,9 +87,7 @@ export class HubNavStateService {
 	 * and vertical-only: below the collapse breakpoint the offcanvas behavior
 	 * always wins, and a horizontal nav has no rail at all.
 	 */
-	readonly railActive = computed(
-		() => this._rail() && !this._collapsed() && this._config().orientation === 'vertical'
-	);
+	readonly railActive = computed(() => this._rail() && !this._collapsed() && this._config().orientation === 'vertical');
 
 	/**
 	 * Accessible labels for the nav's built-in controls. Per label the
@@ -127,7 +125,6 @@ export class HubNavStateService {
 
 		return typeof follow === 'number' ? Math.max(0, follow) : 0;
 	});
-
 
 	/** Computed vertical expand mode shortcut. */
 	readonly verticalExpandMode = computed(() => this._config().verticalExpandMode);
@@ -493,10 +490,7 @@ export class HubNavStateService {
 				}
 				return {
 					...panel,
-					history: [
-						...panel.history,
-						{ items: panel.items, parentLabel: panel.parentItem.label }
-					],
+					history: [...panel.history, { items: panel.items, parentLabel: panel.parentItem.label }],
 					parentItem,
 					items,
 					isDrillDown: true
@@ -612,11 +606,7 @@ export class HubNavStateService {
 	 * @param activeRoute - Currently active route.
 	 * @returns `true` when this item is the one to mark.
 	 */
-	isItemActiveAmongSiblings(
-		item: HubNavItem,
-		siblings: HubNavItem[],
-		activeRoute: string
-	): boolean {
+	isItemActiveAmongSiblings(item: HubNavItem, siblings: HubNavItem[], activeRoute: string): boolean {
 		if (!this.isItemOrDescendantActive(item, activeRoute)) {
 			return false;
 		}
@@ -640,11 +630,7 @@ export class HubNavStateService {
 
 			const siblingRoute = this.routeOf(sibling);
 
-			return (
-				!!siblingRoute &&
-				siblingRoute.length > route.length &&
-				this.isItemOrDescendantActive(sibling, activeRoute)
-			);
+			return !!siblingRoute && siblingRoute.length > route.length && this.isItemOrDescendantActive(sibling, activeRoute);
 		});
 	}
 
@@ -730,5 +716,4 @@ export class HubNavStateService {
 		}
 		return false;
 	}
-
 }

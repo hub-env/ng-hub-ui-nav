@@ -22,9 +22,7 @@ describe('HubNavItemComponent', () => {
 		id: 'services',
 		label: 'Services',
 		type: 'dropdown',
-		children: [
-			{ id: 'web', label: 'Web', type: 'link', route: '/services/web' }
-		]
+		children: [{ id: 'web', label: 'Web', type: 'link', route: '/services/web' }]
 	};
 
 	const routableDropdownItem: HubNavItem = {

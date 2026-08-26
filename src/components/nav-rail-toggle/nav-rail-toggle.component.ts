@@ -50,7 +50,10 @@ import { HUB_NAV_DEFAULT_LABELS } from '../../models/nav-labels.model';
 				border: var(--hub-nav-rail-toggle-border-width, 1px) solid
 					var(--hub-nav-rail-toggle-border-color, var(--hub-nav-border-color, #dee2e6));
 				border-radius: var(--hub-nav-rail-toggle-border-radius, var(--hub-ref-radius-pill, 50rem));
-				box-shadow: var(--hub-nav-rail-toggle-shadow, var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)));
+				box-shadow: var(
+					--hub-nav-rail-toggle-shadow,
+					var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075))
+				);
 				cursor: pointer;
 				/* Complete transition value, matching the shape of the other ds tokens. */
 				transition: var(--hub-nav-rail-toggle-transition, var(--hub-sys-transition-fast, all 0.15s ease-in-out));

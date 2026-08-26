@@ -64,8 +64,7 @@
 :host-context(.hub-nav--horizontal) .hub-nav-item-list__indicator {
 	border-radius: 0;
 	background-color: transparent;
-	box-shadow: inset 0 calc(var(--hub-nav-item-active-indicator-size, 3px) * -1) 0
-		var(--hub-nav-item-active-indicator-color);
+	box-shadow: inset 0 calc(var(--hub-nav-item-active-indicator-size, 3px) * -1) 0 var(--hub-nav-item-active-indicator-color);
 }
 
 // ── Dropdown panel (flyout / horizontal dropdown) ──
@@ -75,8 +74,7 @@
 	min-width: var(--hub-nav-dropdown-min-width, 12rem);
 	background-color: var(--hub-nav-dropdown-bg, #fff);
 	color: var(--hub-nav-dropdown-color, #212529);
-	border: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid)
-		var(--hub-nav-dropdown-border-color, #dee2e6);
+	border: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid) var(--hub-nav-dropdown-border-color, #dee2e6);
 	border-radius: var(--hub-nav-dropdown-border-radius, 0.25rem);
 	box-shadow: var(--hub-nav-dropdown-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 	padding: var(--hub-nav-dropdown-padding-y, 0.5rem) 0;

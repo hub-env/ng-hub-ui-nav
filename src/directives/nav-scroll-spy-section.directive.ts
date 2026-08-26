@@ -22,4 +22,3 @@ export class HubNavScrollSpySectionDirective {
 	/** Effective section id exposed to the container directive. */
 	readonly resolvedSectionId = computed(() => this.sectionId() ?? this.el.nativeElement.id ?? null);
 }
-

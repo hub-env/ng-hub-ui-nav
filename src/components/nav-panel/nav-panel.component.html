@@ -1,22 +1,12 @@
 @if (showHeader()) {
 	<div class="hub-nav-panel__header">
 		@if (panel().isDrillDown) {
-			<button
-				type="button"
-				class="hub-nav-panel__back"
-				[attr.aria-label]="backLabel()"
-				(click)="onBackClick()"
-			>
+			<button type="button" class="hub-nav-panel__back" [attr.aria-label]="backLabel()" (click)="onBackClick()">
 				<span aria-hidden="true">&#8592;</span>
 			</button>
 		}
 		<span class="hub-nav-panel__title">{{ currentLabel() }}</span>
-		<button
-			type="button"
-			class="hub-nav-panel__close"
-			[attr.aria-label]="closeLabel()"
-			(click)="onCloseClick()"
-		>
+		<button type="button" class="hub-nav-panel__close" [attr.aria-label]="closeLabel()" (click)="onCloseClick()">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>

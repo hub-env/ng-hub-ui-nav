@@ -240,7 +240,6 @@ describe('HubNavComponent', () => {
 		});
 	});
 
-
 	/**
 	 * Clicking an entry used to close every dropdown, which is right for a flyout —
 	 * a transient menu that a click dismisses — and wrong for an accordion the
@@ -342,8 +341,7 @@ describe('HubNavComponent', () => {
 			fixture.detectChanges();
 		});
 
-		const toggleButton = (): HTMLButtonElement | null =>
-			fixture.nativeElement.querySelector('hub-nav-rail-toggle button');
+		const toggleButton = (): HTMLButtonElement | null => fixture.nativeElement.querySelector('hub-nav-rail-toggle button');
 
 		it('should render on a vertical desktop nav by default', () => {
 			expect(toggleButton()).not.toBeNull();
@@ -400,5 +398,4 @@ describe('HubNavComponent', () => {
 			expect(toggleButton()!.getAttribute('aria-label')).toBe('Plegar navegación');
 		});
 	});
-
 });

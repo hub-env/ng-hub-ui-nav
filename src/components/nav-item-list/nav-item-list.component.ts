@@ -348,7 +348,6 @@ export class HubNavItemListComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-
 		requestAnimationFrame(() => {
 			this.measureIndicator();
 			// A second frame before the transition is armed: the first one carries the
@@ -610,12 +609,7 @@ export class HubNavItemListComponent implements OnInit, OnDestroy {
 		const existingTemplate = this.overlayTemplateRefs.get(itemId);
 		const existingPlacement = this.overlayPlacements.get(itemId);
 
-		if (
-			existingOverlay &&
-			existingOrigin === origin &&
-			existingTemplate === template &&
-			existingPlacement === placement
-		) {
+		if (existingOverlay && existingOrigin === origin && existingTemplate === template && existingPlacement === placement) {
 			existingOverlay.updatePosition();
 			return;
 		}

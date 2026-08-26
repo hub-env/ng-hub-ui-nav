@@ -193,9 +193,7 @@ export class HubNavPanelComponent {
 	 */
 	private isDirectPanelFocus(target: HTMLElement): boolean {
 		const owningList = target.closest('hub-nav-item-list');
-		const directList = this.el.nativeElement.querySelector(
-			':scope > .hub-nav-panel__body > hub-nav-item-list'
-		);
+		const directList = this.el.nativeElement.querySelector(':scope > .hub-nav-panel__body > hub-nav-item-list');
 
 		return !!owningList && owningList === directList;
 	}
