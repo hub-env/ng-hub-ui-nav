@@ -12,7 +12,35 @@ All notable changes to this project will be documented in this file.
   reference for the package they were already looking at. Metadata only — no code, no types, no
   styles change, and nothing a consumer imports is affected.
 
-## [Unreleased]
+## [22.11.2] - 2026-09-02
+
+### Fixed
+
+- **A sidebar came back from mobile without its section panel.** Narrowing the window below
+  `collapseBreakpoint` and widening it again left the nav expanded but panel-less: crossing back up
+  emptied the panel stack, and nothing refilled it, because panels are derived from the route only
+  on navigation. The user had to navigate somewhere else — anywhere — to get back the section they
+  were already in.
+
+    It reads as a layout collapse rather than as a missing panel, because applications lean on that
+  panel being there: one that hides its own in-page index while the nav shows a panel unfolds a
+  full-height menu the moment the panel disappears, pushing the page the reader had open below the
+  fold.
+
+    The stack is now re-derived from the current URL instead of being left empty. Not merely kept,
+  because it can be stale: while collapsed the offcanvas menu navigates without touching the panels
+  — they are not rendered in that mode — so what survived would describe the page the user left.
+  When the route does not own the panels (`autoOpenFromRoute` off) the stack is whatever the user
+  opened by hand and nothing could rebuild it, so it is now left untouched rather than discarded.
+
+    Worth naming, because removing that unconditional close also removed an incidental cleanup: on a
+    **mixed** nav, where roots carry their own `expandMode`, widening while the active root is in
+    accordion mode leaves a panel from the previous panel-mode section rendered. That leak is not new
+    — ordinary desktop navigation between a panel root and an accordion root already produces it,
+    because the accordion branch returns before touching the stack — but the breakpoint round trip
+    used to mask it and no longer does. Not fixed here: closing there changes what a mixed nav shows
+    on every navigation, which is more than a patch should decide.
+  Either way the narrow/widen round trip ends where it started.
 
 ## [22.11.0] - 2026-08-19
 

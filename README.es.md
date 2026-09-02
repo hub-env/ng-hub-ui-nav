@@ -186,7 +186,7 @@ En el borde exterior de la columna primaria se incluye un botón de colapso: una
 | `config` | `Partial<HubNavConfig>` | `{}` | Configuración por instancia combinada con los defaults globales. |
 | `navClass` | `string` | `''` | Clase adicional aplicada al `<nav>` interno. |
 | `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Plantilla opcional para renderizar items. |
-| `autoOpenFromRoute` | `boolean` | `false` | Abre dropdowns/paneles en función de la ruta activa. |
+| `autoOpenFromRoute` | `boolean` | `false` | Abre dropdowns/paneles en función de la ruta activa. También reconstruye la pila cuando la ventana vuelve por encima de `collapseBreakpoint`; con el input desactivado, una pila abierta a mano sobrevive a ese viaje de ida y vuelta. |
 | `rail` | `boolean` (bidireccional, `model`) | `false` | Rail de iconos solo de escritorio para navegaciones verticales. Se ignora por debajo de `collapseBreakpoint`. Se enlaza con `[(rail)]`. |
 | `variant` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string` | `'primary'` | Acento semántico para los estados hover/activo. Los valores integrados usan los tintes del design-system; cualquier string personalizado se resuelve mediante `--hub-sys-color-<variant>`. |
 

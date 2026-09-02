@@ -701,9 +701,38 @@ export class HubNavComponent implements OnInit, OnDestroy {
 		this.state.setCollapsed(belowBreakpoint);
 		if (!belowBreakpoint) {
 			this.state.closeAllDropdowns();
-			this.state.closeAllPanels();
 			this.mobileToggle.emit(false);
+			this.restorePanelsAfterExpand();
 		}
+	}
+
+	/**
+	 * Rebuilds the panel stack when the viewport comes back above the breakpoint.
+	 *
+	 * Crossing back up used to empty the stack, and nothing refilled it: panels are derived from
+	 * the route only on navigation, so a sidebar that had been narrowed to mobile came back
+	 * expanded but with no section panel until the user navigated somewhere else. Host apps key
+	 * their own layout off that panel — hiding their in-page section index while the nav shows
+	 * one — so its absence unfolds a full-height menu over the page the user was reading.
+	 *
+	 * Rebuilding rather than simply not clearing, because the stack can be stale: while collapsed
+	 * the offcanvas menu navigates without touching the panels (they are not rendered in that
+	 * mode), so a surviving stack would describe the page the user left. Deriving it again from
+	 * the current URL is the only answer that holds whether or not the route moved meanwhile.
+	 *
+	 * Only when the route owns the panels. Without `autoOpenFromRoute` the stack is whatever the
+	 * user opened by hand and nothing can re-derive it, so it is left untouched — which is also
+	 * what makes the narrow/widen round trip end exactly where it started.
+	 */
+	private restorePanelsAfterExpand(): void {
+		if (!this.autoOpenFromRoute()) {
+			return;
+		}
+
+		// Forget the last synced path first: its guard would otherwise read a stack built for
+		// another URL as one already in sync with this one, and skip the rebuild.
+		this._lastSyncedPath = '';
+		this.syncFromRoute(this.items(), this.currentUrl());
 	}
 
 	/**

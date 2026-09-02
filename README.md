@@ -187,7 +187,7 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 | `config` | `Partial<HubNavConfig>` | `{}` | Per-instance config merged with global defaults. |
 | `navClass` | `string` | `''` | Additional class applied to the internal `<nav>`. |
 | `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Optional custom item template. |
-| `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route. |
+| `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
 | `rail` | `boolean` (two-way `model`) | `false` | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`. |
 | `variant` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string` | `'primary'` | Semantic accent for the hover/active affordances. Built-in values render with the design-system tints; any custom string resolves through `--hub-sys-color-<variant>`. |
 
