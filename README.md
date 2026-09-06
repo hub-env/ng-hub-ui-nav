@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `21.1.1` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.11.3` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -70,7 +70,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 - Sticky vertical navigation support.
 - **Desktop icon rail** — the two-way `rail` input collapses a vertical nav to `--hub-nav-rail-width` (4rem) showing icons only: labels surface as tooltips, accordion groups open as click-triggered overlay flyouts, and the offcanvas behavior still wins below `collapseBreakpoint`. A built-in edge toggle ships by default (`config.railToggle: false` to bring your own) and is fully themeable through `--hub-nav-rail-toggle-*`, including a replaceable SVG arrow. The library persists nothing; `railChange` lets the app store the preference.
 - **Tooltip on truncated labels** — long item labels are clipped with an ellipsis (the standard sidebar behaviour) and reveal their full text on hover, automatically and only when truncated (via `ng-hub-ui-utils`' `[hubOverflowTooltip]`). The tooltip is **agnostic** — it defaults to the hub-ui tooltip but is swappable with `provideHubTooltip(...)`. Requires `ng-hub-ui-utils >= 22.8.1` (the library's peer floor) and the tooltip styles (`@use 'ng-hub-ui-utils/styles/tooltip';`). Tip: control the sidebar width with `--hub-nav-panel-width`.
-- Semantic `variant` accent system (`primary` / `success` / `danger` / `warning` / `info`, plus any custom accent) recolouring the hover/active affordances — mirrors `<hub-panels>`.
+- Semantic `color` accent system (`primary` / `success` / `danger` / `warning` / `info`, plus any custom accent or literal colour) recolouring the hover/active affordances — mirrors `<hub-panels>`.
 - Full CSS variable theming via `--hub-nav-*` tokens.
 
 ## Installation
@@ -189,7 +189,7 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 | `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Optional custom item template. |
 | `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
 | `rail` | `boolean` (two-way `model`) | `false` | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`. |
-| `variant` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string` | `'primary'` | Semantic accent for the hover/active affordances. Built-in values render with the design-system tints; any custom string resolves through `--hub-sys-color-<variant>`. |
+| `color` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string \| undefined` | `undefined` (reads as `primary`) | Semantic accent for the hover/active affordances. A bareword — semantic name, registered accent or CSS named colour — resolves through `--hub-sys-color-<name>`; a literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged. |
 
 #### Outputs
 
@@ -219,11 +219,20 @@ interface HubNavConfig {
 	sidebarSide: 'left' | 'right';
 	panelWidth: string;
 	dropdownRenderMode: 'inline' | 'overlay';
+	railToggle?: boolean;
+	activeIndicator?: boolean;
+	followReplacedUrls?: boolean | number;
 	labels?: Partial<HubNavLabels>;
 }
 ```
 
-`labels` overrides the built-in accessible strings (`toggleNavigation`, `closeNavigation`, `goBack`, `closePanel`, `toggleSection` — the latter supports a `{label}` placeholder) per instance. Without an override, each label resolves from the shared `HUBUI.NAV.*` dictionary keys (`provideHubTranslationAdapter()` in `ng-hub-ui-utils`) and finally falls back to English.
+`railToggle` (default `true`) draws the built-in rail toggle on the outer edge of a vertical desktop nav; set it to `false` to supply your own control.
+
+`activeIndicator` (default `false`) moves the active mark to a single element shared by the list so it travels between siblings instead of appearing in place. It is opt-in because the mark stops being painted by each item, so a rule targeting `.hub-nav-item__link--active` no longer applies. It honours `prefers-reduced-motion`.
+
+`followReplacedUrls` (default `true`) decides how eagerly the nav follows a URL that was **replaced** rather than pushed — which is what a scroll spy does while the reader scrolls. `true` follows every report; a **number** follows only once the reports have been quiet for that many milliseconds, so the mark lands where the reader stopped instead of walking down the menu; `false` never follows, marking only where the reader chose to go. Deep links are unaffected either way.
+
+`labels` overrides the built-in accessible strings (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection` — the last one supports a `{label}` placeholder) per instance. Without an override, each label resolves from the shared `HUBUI.NAV.*` dictionary keys (`provideHubTranslationAdapter()` in `ng-hub-ui-utils`) and finally falls back to English.
 
 
 ### `HubNavItem`
@@ -285,7 +294,7 @@ The component exposes a complete set of `--hub-nav-*` tokens. See the full refer
 
 ### Recolour the whole nav from a single accent
 
-The hover/active affordances and the nav surface all derive from one accent hook. Set it (or use the `variant` input) to re-theme the entire nav:
+The hover/active affordances and the nav surface all derive from one accent hook. Set it (or use the `color` input) to re-theme the entire nav:
 
 ```css
 .my-sidebar {

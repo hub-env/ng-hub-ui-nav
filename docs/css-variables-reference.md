@@ -55,7 +55,7 @@ Import the library styles and override tokens at component, page, or theme level
 | `--hub-nav-border-width` | `1px` |
 | `--hub-nav-border-style` | `solid` |
 
-The single `--hub-nav-accent` hook (re-based per the `variant` input) drives the hover/active tints, the active text colour, the indicator bar, and the surface wash — recolour the whole nav from one place.
+The single `--hub-nav-accent` hook (re-based per the `color` input) drives the hover/active tints, the active text colour, the indicator bar, and the surface wash — recolour the whole nav from one place.
 
 ## Brand Slots
 

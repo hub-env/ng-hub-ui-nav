@@ -19,6 +19,12 @@ export class HubNavScrollSpySectionDirective {
 
 	private readonly el = inject(ElementRef<HTMLElement>);
 
-	/** Effective section id exposed to the container directive. */
-	readonly resolvedSectionId = computed(() => this.sectionId() ?? this.el.nativeElement.id ?? null);
+	/**
+	 * Effective section id exposed to the container directive.
+	 *
+	 * Falsy rather than nullish on purpose: the documented bare form, `<section id="x"
+	 * hubNavScrollSpySection>`, reaches the input as the empty string, which `??` would keep —
+	 * stripping the host marker attribute and leaving the container with nothing to observe.
+	 */
+	readonly resolvedSectionId = computed(() => this.sectionId() || this.el.nativeElement.id || null);
 }

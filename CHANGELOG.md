@@ -2,15 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
-## [22.11.1] - 2026-09-01
+## [22.11.3] - 2026-09-06
 
-### Changed
+### Added
 
-- **The `homepage` in the manifest points at this library's own documentation page** rather than at
-  the site root. It is the link a registry shows beside the package and the one a reader clicks from
-  it, and landing on a front page they then have to search is a worse answer than landing on the
-  reference for the package they were already looking at. Metadata only — no code, no types, no
-  styles change, and nothing a consumer imports is affected.
+- `FUNCTIONALITIES.md`, the coverage matrix nine sibling libraries already ship: what the library
+  supports, and which parts a live example actually demonstrates.
+
+### Fixed
+
+- **A section marked the way the README teaches was never tracked.** `<section id="overview"
+  hubNavScrollSpySection>` reaches the directive as the empty string, not as `null` — that is how
+  Angular initialises a valueless static attribute — so the nullish fallback to the host `id` never
+  ran, the host marker attribute was stripped, and the container's query found no sections at all.
+  The spy stayed silent: no `activeSectionChange`, ever, with nothing in the console to explain it.
+
+    Consumers who hit this had to bind the id twice, once as `id` and once as
+  `[hubNavScrollSpySection]`, to get back the behaviour the directive already promised. The
+  fallback is now falsy-aware, so the documented bare form works and the explicit form is unchanged.
+
+- **The documentation described an API the library does not have.** Both READMEs tabulated a
+  `variant` input — renamed to `color` back in 22.7.0 — so anyone copying the row got a compile
+  error, and the only way to learn the real name was to open `projects/nav/src`. The same tables
+  omitted three `HubNavConfig` options (`railToggle`, `activeIndicator`, `followReplacedUrls`) and
+  two overridable labels (`collapseNavigation`, `expandNavigation`), and the version banner still
+  announced `21.1.1`.
+
+- **A breaking minor with no migration note.** The major here tracks Angular, so a breaking change
+  can only ship as a minor and `BREAKING_CHANGES.md` is the only warning a consumer ever gets. Two
+  never got one: the 22.7.0 `variant` → `color` rename and the 22.2.0 `z-index` token renames,
+  which fail silently — a custom property that stops arriving is never an error, the override just
+  stops applying.
+
+- `verticalExpandMode` documented only `accordion` and `flyout` while the type has accepted
+  `panel` since 21.1.0, so the drill-down mode was invisible to anyone reading the interface.
 
 ## [22.11.2] - 2026-09-02
 
@@ -41,6 +66,16 @@ All notable changes to this project will be documented in this file.
     used to mask it and no longer does. Not fixed here: closing there changes what a mixed nav shows
     on every navigation, which is more than a patch should decide.
   Either way the narrow/widen round trip ends where it started.
+
+## [22.11.1] - 2026-09-01
+
+### Changed
+
+- **The `homepage` in the manifest points at this library's own documentation page** rather than at
+  the site root. It is the link a registry shows beside the package and the one a reader clicks from
+  it, and landing on a front page they then have to search is a worse answer than landing on the
+  reference for the package they were already looking at. Metadata only — no code, no types, no
+  styles change, and nothing a consumer imports is affected.
 
 ## [22.11.0] - 2026-08-19
 

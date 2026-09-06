@@ -17,6 +17,8 @@ export interface HubNavConfig {
 	 * Expansion mode for child items in vertical orientation.
 	 * - `accordion`: Children expand/collapse inline with animation.
 	 * - `flyout`: Children appear as a positioned side panel.
+	 * - `panel`: Children open a stacked drill-down panel beside the nav
+	 *   (see `panelMaxVisible` and `panelWidth`).
 	 * @default 'accordion'
 	 */
 	verticalExpandMode: HubNavVerticalExpandMode;
