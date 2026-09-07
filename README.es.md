@@ -8,7 +8,7 @@
 Componente de navegación flexible, accesible y altamente personalizable para Angular 21+. Soporta menús horizontales, sidebars verticales, modos responsive para móvil, paneles apilados con drill-down, slots `start` y `end`, y soporte de scroll-spy.
 
 > [!IMPORTANT]
-> La versión `22.11.3` está orientada a Angular 21 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
+> La versión `22.12.0` está orientada a Angular 21 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
 
 ## Documentación y ejemplos en vivo
 
@@ -186,7 +186,7 @@ En el borde exterior de la columna primaria se incluye un botón de colapso: una
 | `config` | `Partial<HubNavConfig>` | `{}` | Configuración por instancia combinada con los defaults globales. |
 | `navClass` | `string` | `''` | Clase adicional aplicada al `<nav>` interno. |
 | `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Plantilla opcional para renderizar items. |
-| `autoOpenFromRoute` | `boolean` | `false` | Abre dropdowns/paneles en función de la ruta activa. También reconstruye la pila cuando la ventana vuelve por encima de `collapseBreakpoint`; con el input desactivado, una pila abierta a mano sobrevive a ese viaje de ida y vuelta. |
+| `autoOpenFromRoute` | `boolean` | `false` | Abre dropdowns/paneles en función de la ruta activa y deja una sola sección abierta cuando las raíces se expanden de formas distintas: al llegar a una raíz en acordeón se cierra el panel de la raíz que dejas, y al revés. También reconstruye la pila cuando la ventana vuelve por encima de `collapseBreakpoint`; con el input desactivado, una pila abierta a mano sobrevive a ese viaje de ida y vuelta. |
 | `rail` | `boolean` (bidireccional, `model`) | `false` | Rail de iconos solo de escritorio para navegaciones verticales. Se ignora por debajo de `collapseBreakpoint`. Se enlaza con `[(rail)]`. |
 | `color` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string \| undefined` | `undefined` (se lee como `primary`) | Acento semántico para los estados hover/activo. Una palabra suelta —nombre semántico, acento registrado o color con nombre de CSS— se resuelve mediante `--hub-sys-color-<nombre>`; un literal `#hex` / `rgb()` / `oklch()` / `var()` se usa tal cual. |
 

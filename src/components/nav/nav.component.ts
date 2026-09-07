@@ -368,19 +368,42 @@ export class HubNavComponent implements OnInit, OnDestroy {
 			return;
 		}
 
+		// Which root the reader is now inside, resolved by the most specific match rather than
+		// the first one — the same rule {@link openPanelsFromRoute} uses. A root parked on the
+		// language prefix (`/en/`) matches every URL in the site, and taking it as the answer
+		// handed an accordion section's navigation to the panel stack.
+		const activeRootItem = items.find((item) => this.state.isItemActiveAmongSiblings(item, items, currentUrl));
+
+		// Nowhere in the menu — a settings screen, a 404. Whatever is open describes the page
+		// just left, so both mechanisms are cleared rather than only the panels.
+		if (!activeRootItem) {
+			this.state.closeAllDropdowns();
+			this.state.closeAllPanels();
+			this._lastSyncedPath = currentPath;
+			return;
+		}
+
 		// An accordion opens in place, so what the route has to open is its
 		// dropdown state — not the panel stack, which is the drill-down mechanism
 		// and is not rendered in this mode. Deciding by collapsed-or-not alone
 		// left an expanded accordion with nothing opened from the route: the
 		// section somebody had just navigated into stayed shut, while a panel
 		// nobody could see was opened behind the page.
-		const activeRootItem = items.find((item) => this.state.isItemOrDescendantActive(item, currentUrl));
-
-		if (activeRootItem && this.state.getEffectiveExpandMode(activeRootItem) === 'accordion') {
+		if (this.state.getEffectiveExpandMode(activeRootItem) === 'accordion') {
 			this.state.syncDropdownsWithRoute(items, currentUrl);
+			// In a mixed nav the reader can arrive here from a root that drills down into
+			// panels, and that panel now has no owner: an accordion expands in place and
+			// never touches the stack, so nothing else would ever close it. Two sections
+			// stayed open at once, one of them the one just walked out of.
+			this.state.closeAllPanels();
 			this._lastSyncedPath = currentPath;
 			return;
 		}
+
+		// The mirror of the branch above. This root does not expand in place, so any dropdown
+		// still open belongs to the section left behind — including the case of a root with no
+		// children at all, which opens neither mechanism and must therefore leave neither.
+		this.state.closeAllDropdowns();
 
 		if (currentPath === this._lastSyncedPath && this.state.panelCount() > 0) {
 			return;

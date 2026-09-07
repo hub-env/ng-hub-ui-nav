@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.12.0] - 2026-09-07
+
+### Fixed
+
+- **The flyout panel stayed hanging where its trigger had been.** In a menu that mixes the two
+  expansions, opening a floating section closes the accordion above it and everything underneath
+  rises to fill the gap, the trigger included. Neither of the two things the overlay watched — the
+  page scrolling, the window resizing — happens there, so the panel kept the height the trigger had
+  before the collapse and was left orphaned halfway down the menu, next to nothing in particular.
+  The collapse is animated, so it is not a jump either: the trigger slides for the length of the
+  transition and the panel now travels with it the whole way. Fixed in `ng-hub-ui-utils` 22.13.0,
+  which is what this release requires.
+
+- **A mixed menu left the panel of the section you had just walked out of on screen.** In a nav
+  where one root drills down into panels and another expands in place, landing on the accordion
+  root synchronised the dropdowns and left the panel stack alone — an accordion never touches that
+  stack, so nothing ever closed it. The reader was shown two open sections at once, one of them the
+  section they had just left. The mirror image was true too: landing on a panel root left the
+  previous accordion expanded beside the new panel. Each root now clears whatever the other opened,
+  while moving inside the root you are already in still leaves that section standing.
+
+- **A first entry sitting on the language prefix swallowed every route match.** The active root was
+  taken to be the first item matching the URL, and an item routed at `/en/` matches every page in
+  the site, so in such a menu the section actually holding the route was never the one resolved:
+  accordion sections stayed shut on every page, and their navigation was handed to the panel stack
+  instead. The active root and the trail of open dropdowns now both resolve by the longest matching
+  route — the rule the panel opener already followed.
+
+- **A page outside the menu left the last section marked open.** Panels were cleared when no item
+  matched the URL, the dropdowns were not, so the nav went on claiming the reader was inside a
+  section they had left. Both are cleared now, and likewise when the route lands on a root with no
+  children of its own.
+
+### Changed
+
+- `ng-hub-ui-utils` peer floor raised to `>=22.13.0`, which is where the overlay learned to follow a
+  trigger that moves. Below it the flyout panel still parts company with its item, so the floor is
+  the only thing that keeps the fix above from being a promise the installed packages cannot keep.
+  Raising a floor is what forces this release to be a minor rather than the patch it started as:
+  the fix itself changes no public shape in this library.
+
+- `closeAllDropdowns()` and `closeAllPanels()` on `HubNavStateService` skip the write when there is
+  nothing open. Route synchronisation calls both on every navigation, and a signal has no value
+  equality: writing an empty set over an empty set woke every reader for nothing.
+
 ## [22.11.3] - 2026-09-06
 
 ### Added

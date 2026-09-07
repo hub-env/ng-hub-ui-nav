@@ -50,6 +50,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 | | Travelling active mark (`activeIndicator`) | ✅ |
 | | Following replaced URLs (`followReplacedUrls`, boolean or debounce in ms) | ✅ |
 | | Opening dropdowns and panels from the route (`autoOpenFromRoute`) | ❌ |
+| | One open section at a time when roots expand differently | ❌ |
 | **Slots & templates** | `hubNavStart` / `hubNavEnd` projected slots | ✅ |
 | | `inDrawer` slot context flag | ❌ |
 | | `hubNavItemTemplate` directive | ✅ |

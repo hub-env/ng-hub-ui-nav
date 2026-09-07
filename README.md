@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.11.3` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.12.0` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -69,7 +69,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 - Scroll-spy helpers for documentation pages and one-page layouts.
 - Sticky vertical navigation support.
 - **Desktop icon rail** — the two-way `rail` input collapses a vertical nav to `--hub-nav-rail-width` (4rem) showing icons only: labels surface as tooltips, accordion groups open as click-triggered overlay flyouts, and the offcanvas behavior still wins below `collapseBreakpoint`. A built-in edge toggle ships by default (`config.railToggle: false` to bring your own) and is fully themeable through `--hub-nav-rail-toggle-*`, including a replaceable SVG arrow. The library persists nothing; `railChange` lets the app store the preference.
-- **Tooltip on truncated labels** — long item labels are clipped with an ellipsis (the standard sidebar behaviour) and reveal their full text on hover, automatically and only when truncated (via `ng-hub-ui-utils`' `[hubOverflowTooltip]`). The tooltip is **agnostic** — it defaults to the hub-ui tooltip but is swappable with `provideHubTooltip(...)`. Requires `ng-hub-ui-utils >= 22.8.1` (the library's peer floor) and the tooltip styles (`@use 'ng-hub-ui-utils/styles/tooltip';`). Tip: control the sidebar width with `--hub-nav-panel-width`.
+- **Tooltip on truncated labels** — long item labels are clipped with an ellipsis (the standard sidebar behaviour) and reveal their full text on hover, automatically and only when truncated (via `ng-hub-ui-utils`' `[hubOverflowTooltip]`). The tooltip is **agnostic** — it defaults to the hub-ui tooltip but is swappable with `provideHubTooltip(...)`. Requires `ng-hub-ui-utils >= 22.13.0` (the library's peer floor) and the tooltip styles (`@use 'ng-hub-ui-utils/styles/tooltip';`). Tip: control the sidebar width with `--hub-nav-panel-width`.
 - Semantic `color` accent system (`primary` / `success` / `danger` / `warning` / `info`, plus any custom accent or literal colour) recolouring the hover/active affordances — mirrors `<hub-panels>`.
 - Full CSS variable theming via `--hub-nav-*` tokens.
 
@@ -187,7 +187,7 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 | `config` | `Partial<HubNavConfig>` | `{}` | Per-instance config merged with global defaults. |
 | `navClass` | `string` | `''` | Additional class applied to the internal `<nav>`. |
 | `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Optional custom item template. |
-| `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
+| `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route, and leaves exactly one section open when roots expand differently: arriving at an accordion root drops the panel of the panel root you left, and the other way round. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
 | `rail` | `boolean` (two-way `model`) | `false` | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`. |
 | `color` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string \| undefined` | `undefined` (reads as `primary`) | Semantic accent for the hover/active affordances. A bareword — semantic name, registered accent or CSS named colour — resolves through `--hub-sys-color-<name>`; a literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged. |
 

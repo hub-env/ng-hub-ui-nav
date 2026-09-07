@@ -286,8 +286,17 @@ export class HubNavStateService {
 		return true;
 	}
 
-	/** Closes all open dropdowns. */
+	/**
+	 * Closes all open dropdowns.
+	 *
+	 * Writing an empty set over an empty set is not free: the signal has no value equality, so
+	 * every reader re-runs. Route synchronisation calls this on each navigation, and this nav
+	 * has already been observed generating state churn by the million in a single SSR pass.
+	 */
 	closeAllDropdowns(): void {
+		if (this._openDropdowns().size === 0) {
+			return;
+		}
 		this._openDropdowns.set(new Set());
 	}
 
@@ -425,6 +434,12 @@ export class HubNavStateService {
 	/**
 	 * Finds the ordered list of dropdown ancestor IDs for the active route.
 	 *
+	 * The walk commits to the first branch it accepts, so which item it accepts has to be the
+	 * most specific one at each level, not merely the first that matches: a menu whose opening
+	 * entry is parked on the language prefix (`/en/`) matches every URL in the site, and being
+	 * childless it ended the walk with an empty trail — every section stayed shut, whichever
+	 * page you were on.
+	 *
 	 * @param items - Items to search recursively.
 	 * @param activeRoute - Current router URL.
 	 * @param trail - Accumulated ancestor trail.
@@ -432,7 +447,7 @@ export class HubNavStateService {
 	 */
 	private findActiveDropdownTrail(items: HubNavItem[], activeRoute: string, trail: string[] = []): string[] {
 		for (const item of items) {
-			if (!this.isItemOrDescendantActive(item, activeRoute)) {
+			if (!this.isItemActiveAmongSiblings(item, items, activeRoute)) {
 				continue;
 			}
 
@@ -469,8 +484,11 @@ export class HubNavStateService {
 		this._panelStack.update((stack) => stack.slice(0, index));
 	}
 
-	/** Closes all open panels. */
+	/** Closes all open panels. Skips the write when the stack is already empty, as {@link closeAllDropdowns} does. */
 	closeAllPanels(): void {
+		if (this._panelStack().length === 0) {
+			return;
+		}
 		this._panelStack.set([]);
 	}
 
