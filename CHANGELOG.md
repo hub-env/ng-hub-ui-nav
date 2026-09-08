@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.12.1] - 2026-09-07
+
+### Changed
+
+- **The rail tooltip is drawn by `[hubTooltip]`.** A collapsed rail hides the item labels and
+  puts each one in a tooltip; that tooltip came from `[tooltip]`, which `ng-hub-ui-utils` removes
+  in 22.14.0 because a bare attribute is a name in the application's namespace rather than a
+  library's. The prefixed directive is the same tooltip — both were thin shells over the same
+  controller — so nothing about the rail changes, and this library keeps working with any
+  `ng-hub-ui-utils` from 22.13.0 up.
+
 ## [22.12.0] - 2026-09-07
 
 ### Fixed

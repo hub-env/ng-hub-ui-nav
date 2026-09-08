@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-nav",
-	"version": "22.12.0",
+	"version": "22.12.1",
 	"license": "MIT",
 	"description": "A flexible, accessible, and customizable navigation component for Angular 21, part of the ng-hub-ui family.",
 	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",

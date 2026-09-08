@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output, inject, computed, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { HubOverflowTooltipDirective, TooltipDirective } from 'ng-hub-ui-utils';
+import { HubOverflowTooltipDirective, HubTooltipDirective } from 'ng-hub-ui-utils';
 import { HubNavItem } from '../../models/nav-item.model';
 import { HubNavStateService } from '../../services/nav-state.service';
 
@@ -14,7 +14,7 @@ import { HubNavStateService } from '../../services/nav-state.service';
 @Component({
 	selector: 'hub-nav-item',
 	standalone: true,
-	imports: [NgTemplateOutlet, RouterLink, HubOverflowTooltipDirective, TooltipDirective],
+	imports: [NgTemplateOutlet, RouterLink, HubOverflowTooltipDirective, HubTooltipDirective],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
 		class: 'hub-nav-item',

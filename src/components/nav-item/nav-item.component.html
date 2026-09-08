@@ -17,8 +17,8 @@
 		[attr.tabindex]="item().disabled ? -1 : 0"
 		[attr.aria-disabled]="item().disabled || null"
 		[attr.aria-current]="isActive() ? 'page' : null"
-		[tooltip]="railTooltip()"
-		[placement]="railTooltipPlacement()"
+		[hubTooltip]="railTooltip()"
+		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
 		@if (item().icon) {
@@ -48,8 +48,8 @@
 			[attr.aria-current]="isActive() ? 'page' : null"
 			[attr.aria-expanded]="showCaret() ? null : isExpanded()"
 			[attr.aria-haspopup]="showCaret() ? null : true"
-			[tooltip]="railTooltip()"
-			[placement]="railTooltipPlacement()"
+			[hubTooltip]="railTooltip()"
+			[hubTooltipPlacement]="railTooltipPlacement()"
 			(click)="onRouteItemClick($event)"
 		>
 			@if (item().icon) {
@@ -93,8 +93,8 @@
 		[attr.aria-haspopup]="true"
 		[attr.tabindex]="item().disabled ? -1 : 0"
 		[attr.aria-disabled]="item().disabled || null"
-		[tooltip]="railTooltip()"
-		[placement]="railTooltipPlacement()"
+		[hubTooltip]="railTooltip()"
+		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
 		@if (item().icon) {
@@ -119,8 +119,8 @@
 		[class.hub-nav-item__link--disabled]="item().disabled"
 		[attr.tabindex]="item().disabled ? -1 : 0"
 		[attr.aria-disabled]="item().disabled || null"
-		[tooltip]="railTooltip()"
-		[placement]="railTooltipPlacement()"
+		[hubTooltip]="railTooltip()"
+		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
 		@if (item().icon) {
