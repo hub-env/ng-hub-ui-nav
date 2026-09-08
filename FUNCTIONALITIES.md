@@ -98,7 +98,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 | **Accent** | `color` input (semantic name, registered accent or literal colour) | ❌ |
 | | `--hub-nav-accent` single recolour hook | ✅ |
 | | Derived roles `--hub-nav-accent-subtle` / `-emphasis` / `-on` | ❌ |
-| **Tokens** | Surface (`--hub-nav-bg`, `--hub-nav-border-*`, `--hub-nav-box-shadow`) | ❌ |
+| **Tokens** | Surface (`--hub-nav-bg`, `--hub-nav-bg-image`, `--hub-nav-border-*`, `--hub-nav-box-shadow`) | ❌ |
 | | Items (`--hub-nav-item-*`) | ✅ |
 | | Dropdowns (`--hub-nav-dropdown-*`) | ❌ |
 | | Panels (`--hub-nav-panel-width`) | ✅ |

@@ -8,7 +8,7 @@
 Componente de navegación flexible, accesible y altamente personalizable para Angular 21+. Soporta menús horizontales, sidebars verticales, modos responsive para móvil, paneles apilados con drill-down, slots `start` y `end`, y soporte de scroll-spy.
 
 > [!IMPORTANT]
-> La versión `22.12.1` está orientada a Angular 21 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
+> La versión `22.13.0` está orientada a Angular 21 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
 
 ## Documentación y ejemplos en vivo
 
@@ -304,6 +304,21 @@ Los estados hover/activo y la superficie de la navegación derivan todos de un �
 	   este único acento. */
 	--hub-nav-accent: var(--hub-sys-color-success);
 	--hub-nav-dropdown-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.16);
+}
+```
+
+### Vestir la barra con un degradado
+
+El relleno son un color y una imagen en dos propiedades distintas, así que un degradado va en
+`--hub-nav-bg-image` y nunca en `--hub-nav-bg`. No es una manía de estilo: un degradado es una
+`<image>`, así que un `var()` que lo lleve sustituido dentro de `background-color` computa a un
+valor inválido y tira la declaración entera — la barra se quedaría sin fondo en vez de caer al
+color de respaldo. Separados, `--hub-nav-bg` se queda debajo como reserva.
+
+```css
+.my-sidebar {
+	--hub-nav-bg: #4c1d95;
+	--hub-nav-bg-image: linear-gradient(180deg, #6d28d9, #4c1d95);
 }
 ```
 

@@ -50,6 +50,7 @@ Import the library styles and override tokens at component, page, or theme level
 | `--hub-nav-accent` | `var(--hub-sys-color-primary, #0d6efd)` |
 | `--hub-nav-accent-subtle` | `color-mix(in oklch, var(--hub-nav-accent) 12%, var(--hub-sys-surface-page, #ffffff))` |
 | `--hub-nav-bg` | `color-mix(in oklch, var(--hub-nav-accent) 5%, var(--hub-sys-surface-page, #fff))` |
+| `--hub-nav-bg-image` | `none` — a `<image>` layered over `--hub-nav-bg`. Set it to paint the bar with a gradient: a gradient substituted into `background-color` computes to an invalid value and drops the declaration, leaving the bar with no fill at all, so it travels on its own property with the colour underneath as the fallback |
 | `--hub-nav-color` | `var(--hub-sys-text-primary, #212529)` |
 | `--hub-nav-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-nav-border-width` | `1px` |

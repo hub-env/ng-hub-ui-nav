@@ -7,6 +7,12 @@
 nav {
 	display: flex;
 	background-color: var(--hub-nav-bg, #fff);
+	// Kept on its own property rather than folding it into `background`. A gradient is
+	// an <image>, so a var() holding one substituted into background-color computes to
+	// an invalid value and the declaration drops to unset — the bar loses its fill
+	// entirely instead of falling back. With the image on a second property, the colour
+	// underneath stays as the fallback when the image fails or is never set.
+	background-image: var(--hub-nav-bg-image, none);
 	color: var(--hub-nav-color, #212529);
 	border: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid) var(--hub-nav-border-color, #dee2e6);
 	// Container radius + elevation. Default to 0 / none so existing bars are

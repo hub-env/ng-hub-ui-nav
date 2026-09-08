@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.12.1` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.13.0` targets Angular 21 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -303,6 +303,21 @@ The hover/active affordances and the nav surface all derive from one accent hook
 	   tint, indicator bar, and surface wash all follow this one accent. */
 	--hub-nav-accent: var(--hub-sys-color-success);
 	--hub-nav-dropdown-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.16);
+}
+```
+
+### Paint the bar with a gradient
+
+The fill is a colour and an image on two separate properties, so a gradient goes on
+`--hub-nav-bg-image` and never on `--hub-nav-bg`. That is not a style preference: a gradient is an
+`<image>`, so a `var()` holding one substituted into `background-color` computes to an invalid
+value and the whole declaration is dropped — the bar would come out with no fill at all rather than
+falling back to the colour. Kept apart, `--hub-nav-bg` stays underneath as the fallback.
+
+```css
+.my-sidebar {
+	--hub-nav-bg: #4c1d95;
+	--hub-nav-bg-image: linear-gradient(180deg, #6d28d9, #4c1d95);
 }
 ```
 

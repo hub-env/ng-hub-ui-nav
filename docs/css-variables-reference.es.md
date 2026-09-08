@@ -50,6 +50,7 @@ Importa los estilos de la librería y sobrescribe los tokens a nivel de componen
 | `--hub-nav-accent` | `var(--hub-sys-color-primary, #0d6efd)` |
 | `--hub-nav-accent-subtle` | `color-mix(in srgb, var(--hub-nav-accent) 14%, var(--hub-sys-surface-page, #fff))` |
 | `--hub-nav-bg` | `color-mix(in srgb, var(--hub-nav-accent) 5%, var(--hub-sys-surface-page, #fff))` |
+| `--hub-nav-bg-image` | `none` — una `<image>` que se pinta sobre `--hub-nav-bg`. Se usa para vestir la barra con un degradado: un degradado sustituido dentro de `background-color` da un valor inválido y tira la declaración entera, así que la barra se quedaría sin fondo; por eso viaja en su propia propiedad, con el color debajo como reserva |
 | `--hub-nav-color` | `var(--hub-sys-text-primary, #212529)` |
 | `--hub-nav-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-nav-border-width` | `1px` |

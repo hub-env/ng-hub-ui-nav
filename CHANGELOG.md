@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.13.0] - 2026-09-08
+
+### Added
+
+- **`--hub-nav-bg-image`, so the bar can carry a gradient.** The fill was only ever
+  `background-color`, which takes a `<color>` and nothing else. A gradient is an `<image>`, so a
+  `var()` holding one computes to an invalid value there and the declaration drops to unset — the
+  bar ends up with no fill at all rather than falling back to the colour. The image now travels on
+  its own property, layered over `--hub-nav-bg`, which keeps that colour as the fallback when the
+  image is absent or fails. Nothing changes for a bar that does not set it.
+
 ## [22.12.1] - 2026-09-07
 
 ### Changed
