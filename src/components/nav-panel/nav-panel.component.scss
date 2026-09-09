@@ -193,18 +193,41 @@
 	// specific of the two. Defaults to `none`, so the terminal edge is drawn once and not
 	// twice; set it to `var(--hub-nav-panel-shadow)` to keep the panel's own.
 	box-shadow: var(--hub-nav-panel-last-shadow, none);
+
+	/**
+	 * The outermost panel closes the nav's own shape, so it takes the nav's corners.
+	 *
+	 * `--hub-nav-border-radius` rounds the `<nav>`, and the `<nav>` is what paints the
+	 * rail's fill across the whole composite — but a panel paints a fill of its own on top
+	 * of it. With a radius set and a panel open, the rail came out rounded on the side the
+	 * items are on and square on the side the panel is, which is the side the eye reads as
+	 * the edge of the thing.
+	 *
+	 * Rounding here rather than clipping in the `<nav>`: clipping would also cut the
+	 * flyouts and drill-downs that are meant to escape it. Defaults to `0`, so a nav with
+	 * no radius is unchanged.
+	 */
+	border-start-end-radius: var(--hub-nav-border-radius, 0);
+	border-end-end-radius: var(--hub-nav-border-radius, 0);
 }
 
 /* A right-hand sidebar closes on its left, whichever way the text runs. */
 :host-context(.hub-nav-panel-container--right).hub-nav-panel--last {
 	border-left: var(--hub-nav-panel-border-width) solid var(--hub-nav-panel-border-color);
 	border-right: none;
+	// A sidebar on the right closes on its left, and so do its corners.
+	border-start-end-radius: 0;
+	border-end-end-radius: 0;
+	border-start-start-radius: var(--hub-nav-border-radius, 0);
+	border-end-start-radius: var(--hub-nav-border-radius, 0);
 }
 
 /* Horizontal panels form a row, not a vertical stack. */
 :host-context(.hub-nav--horizontal).hub-nav-panel--last {
 	border-left: none;
 	border-right: none;
+	// A horizontal nav's panels drop below the bar; the bar keeps its own corners.
+	border-radius: 0;
 }
 
 @keyframes hubNavPanelEnterRight {

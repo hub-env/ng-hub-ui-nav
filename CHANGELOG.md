@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.14.0] - 2026-09-08
+
+### Fixed
+
+- **A nav with a radius came out square on the side its panel was open.**
+  `--hub-nav-border-radius` rounds the `<nav>`, and the `<nav>` paints the rail's fill
+  across the whole composite — but a drill-down panel paints a fill of its own on top of
+  it, with no corners. So a rounded rail was rounded on the side the items are on and
+  square on the side the panel is, which is the side the eye reads as the edge of the
+  thing. The outermost panel now takes the nav's own radius on its closing corners, and
+  a right-hand sidebar takes it on the other side.
+
+  Rounding the panel rather than clipping the `<nav>`: clipping would also cut the flyouts
+  and drill-downs that are meant to escape it. The value defaults to `0`, so a nav with no
+  radius is unchanged.
+
 ## [22.13.0] - 2026-09-08
 
 ### Added
