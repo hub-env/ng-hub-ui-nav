@@ -163,6 +163,55 @@ describe('HubNavComponent panel mode opening from the route', () => {
 
 		expect(component.state.panelCount()).toBeGreaterThan(0);
 	});
+
+	/** Moves the router and settles the fixture. */
+	async function goTo(url: string): Promise<void> {
+		await TestBed.inject(Router).navigateByUrl(url);
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
+	}
+
+	/**
+	 * Moving between entries of the panel already open keeps that panel. It used to be
+	 * rebuilt with a new id, the container tracks panels by id, and so every click inside a
+	 * panel mounted it again: its entrance animation replayed and its items jumped.
+	 */
+	it('keeps the open panel when the route moves between its own entries', async () => {
+		await arrange('/en/forms/overview');
+		const opened = component.state.panelStack()[0];
+
+		await goTo('/en/forms/api');
+
+		expect(component.state.panelCount()).toBe(1);
+		expect(component.state.panelStack()[0].id).toBe(opened.id);
+	});
+
+	/** Kept, but not frozen: a list of entries that changed meanwhile still shows. */
+	it('shows a changed list of entries without mounting the panel again', async () => {
+		await arrange('/en/forms/overview');
+		const opened = component.state.panelStack()[0];
+
+		componentRef.setInput(
+			'items',
+			libraryItems.map((item) =>
+				item.id === 'forms'
+					? {
+							...item,
+							children: [
+								...(item.children ?? []),
+								{ id: 'forms-news', label: 'News', type: 'link', route: '/en/forms/news' } as HubNavItem
+							]
+						}
+					: item
+			)
+		);
+		await goTo('/en/forms/news');
+
+		const panel = component.state.panelStack()[0];
+		expect(panel.id).toBe(opened.id);
+		expect(panel.items.map((item) => item.id)).toContain('forms-news');
+	});
 });
 
 /**

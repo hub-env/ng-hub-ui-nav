@@ -350,6 +350,48 @@ export class HubNavStateService {
 	// ──────────────────────────────────────────────
 
 	/**
+	 * Whether the open panels are exactly these parents, in this order, with no drill-down
+	 * and within the visible limit.
+	 *
+	 * A route change that stays inside them can then keep the panels instead of rebuilding
+	 * them: a rebuilt panel gets a new id, the container tracks panels by id, and the panel
+	 * is mounted again with its entrance animation.
+	 *
+	 * @param parents - The items whose panels the current route calls for, outermost first.
+	 */
+	holdsPanelChain(parents: HubNavItem[]): boolean {
+		const stack = this._panelStack();
+		const effectiveMaxVisible = Math.max(1, this._config().panelMaxVisible - 1);
+
+		return (
+			stack.length === parents.length &&
+			stack.length <= effectiveMaxVisible &&
+			stack.every(
+				(panel, index) => panel.parentItem.id === parents[index].id && !panel.isDrillDown && panel.history.length === 0
+			)
+		);
+	}
+
+	/**
+	 * Re-reads the children of the open panels in place, keeping each panel's id.
+	 *
+	 * The route-driven counterpart of {@link openPanel} for panels that are already open:
+	 * their parents may have been rebuilt with different children (an item added, a badge
+	 * changed), and the panel has to show them without being mounted again.
+	 *
+	 * @param parents - The same parents {@link holdsPanelChain} was asked about.
+	 */
+	refreshPanelItems(parents: HubNavItem[]): void {
+		this._panelStack.update((stack) =>
+			stack.map((panel, index) => ({
+				...panel,
+				parentItem: parents[index],
+				items: parents[index].children ?? []
+			}))
+		);
+	}
+
+	/**
 	 * Opens a new panel for the given parent item's children.
 	 * If the panel count has reached `panelMaxVisible`, drills down within the last panel instead.
 	 *

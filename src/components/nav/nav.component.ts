@@ -810,14 +810,25 @@ export class HubNavComponent implements OnInit, OnDestroy {
 
 		this._lastSyncedPath = path;
 
-		// Always rebuild route-driven panel state from scratch to avoid stale
-		// panel stacks when visibility limits or orientation changed.
-		this.state.closeAllPanels();
-		this.state.openPanel(rootItem, rootItems);
-
 		const sectionItem = rootItem.children.find(
 			(child) => child.children?.length && this.state.isItemOrDescendantActive(child, url)
 		);
+
+		// Moving between entries of the panels already open keeps them. Rebuilding gave each
+		// panel a new id, the container tracks panels by id, and so every click inside a
+		// panel mounted it again: its entrance animation replayed and its items jumped. The
+		// contents are re-read in place, so a changed list of items still shows.
+		const wanted = sectionItem ? [rootItem, sectionItem] : [rootItem];
+		if (this.state.holdsPanelChain(wanted)) {
+			this.state.refreshPanelItems(wanted);
+			return;
+		}
+
+		// Anything else rebuilds from scratch, which also covers a visibility limit or an
+		// orientation that changed since the panels were opened.
+		this.state.closeAllPanels();
+		this.state.openPanel(rootItem, rootItems);
+
 		if (sectionItem) {
 			// Keep root-level replacement logic scoped to true root items.
 			// Passing rootItems here preserves drill-down behavior when

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.14.1] - 2026-09-13
+
+### Fixed
+
+- **Every click on an entry of an open panel mounted the panel again.** The route sync
+  rebuilt the whole panel stack on each navigation, and each rebuilt panel got a new id.
+  The container tracks panels by id, so a click on a sibling entry — «Marcas» after
+  «Productos», «Usuarios» after «Empresas» — destroyed the panel and created an identical
+  one: its entrance animation replayed, the panel flashed and its items jumped.
+
+  Moving between the entries of the panels already open now keeps them and only re-reads
+  their items, so a list that changed meanwhile still shows. Opening a different section,
+  a drill-down, or a change in `panelMaxVisible` still rebuilds the stack as before, and
+  the entrance animation still plays when a panel really opens.
+
 ## [22.14.0] - 2026-09-08
 
 ### Fixed
