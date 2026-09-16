@@ -3,7 +3,7 @@
 **Español** | [English](./README.md)
 
 [![npm version](https://img.shields.io/npm/v/ng-hub-ui-nav.svg)](https://www.npmjs.com/package/ng-hub-ui-nav)
-[![license](https://img.shields.io/npm/l/ng-hub-ui-nav.svg)](https://github.com/carlos-morcillo/ng-hub-ui-nav/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/ng-hub-ui-nav.svg)](https://github.com/hub-env/ng-hub-ui-nav/blob/main/LICENSE)
 
 Componente de navegación flexible, accesible y altamente personalizable para Angular 21+. Soporta menús horizontales, sidebars verticales, modos responsive para móvil, paneles apilados con drill-down, slots `start` y `end`, y soporte de scroll-spy.
 
@@ -17,6 +17,7 @@ Este paquete forma parte de [Hub UI](https://hubui.dev/en/), una colección de b
 - Documentación: https://hubui.dev/en/nav/overview/
 - Ejemplos en vivo: https://hubui.dev/en/nav/examples/
 - Hub UI: https://hubui.dev/en/
+- Hub UI en GitHub (incidencias, roadmap y cómo contribuir): https://github.com/hub-env/hub-ui
 
 ## 🧩 Familia `ng-hub-ui`
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- The repository moved to the `hub-env` organization. Issues for every Hub UI package are now
+  gathered in [hub-env/hub-ui](https://github.com/hub-env/hub-ui/issues), and the `repository`, `bugs`
+  and README links point at the new addresses. GitHub redirects the old ones.
+
 ## [22.14.1] - 2026-09-13
 
 ### Fixed
