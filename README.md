@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.14.2` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.14.3` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
