@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.15.0] - 2026-09-23
+
+### Changed
+
+- **BREAKING — the Angular floor rises from `17.2.0` to `17.3.0`.** The old range was
+  measured from the source alone, and its published `.d.ts` names `InputSignalWithTransform` or `OutputEmitterRef`, which Angular did not ship until 17.3. An application below the new floor could install this
+  package and then fail to build, with an error that pointed at Angular rather than here; it now
+  gets the peer warning it should always have had. Nothing that worked stops working. See
+  `BREAKING_CHANGES.md`.
+- **The floor is proved by running it now, not only derived.** `npm run floors:matrix` builds a real
+  project pinned to the oldest Angular this package claims, installs it there, typechecks the
+  published types against that version's `@angular/*` and runs that version's linker over the
+  compiled output. It is what found this.
+
 ## [22.14.3] - 2026-09-23
 
 ### Changed
@@ -34,10 +48,10 @@ All notable changes to this project will be documented in this file.
   «Productos», «Usuarios» after «Empresas» — destroyed the panel and created an identical
   one: its entrance animation replayed, the panel flashed and its items jumped.
 
-  Moving between the entries of the panels already open now keeps them and only re-reads
-  their items, so a list that changed meanwhile still shows. Opening a different section,
-  a drill-down, or a change in `panelMaxVisible` still rebuilds the stack as before, and
-  the entrance animation still plays when a panel really opens.
+    Moving between the entries of the panels already open now keeps them and only re-reads
+    their items, so a list that changed meanwhile still shows. Opening a different section,
+    a drill-down, or a change in `panelMaxVisible` still rebuilds the stack as before, and
+    the entrance animation still plays when a panel really opens.
 
 ## [22.14.0] - 2026-09-08
 
@@ -51,9 +65,9 @@ All notable changes to this project will be documented in this file.
   thing. The outermost panel now takes the nav's own radius on its closing corners, and
   a right-hand sidebar takes it on the other side.
 
-  Rounding the panel rather than clipping the `<nav>`: clipping would also cut the flyouts
-  and drill-downs that are meant to escape it. The value defaults to `0`, so a nav with no
-  radius is unchanged.
+    Rounding the panel rather than clipping the `<nav>`: clipping would also cut the flyouts
+    and drill-downs that are meant to escape it. The value defaults to `0`, so a nav with no
+    radius is unchanged.
 
 ## [22.13.0] - 2026-09-08
 
@@ -132,14 +146,14 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - **A section marked the way the README teaches was never tracked.** `<section id="overview"
-  hubNavScrollSpySection>` reaches the directive as the empty string, not as `null` — that is how
+hubNavScrollSpySection>` reaches the directive as the empty string, not as `null` — that is how
   Angular initialises a valueless static attribute — so the nullish fallback to the host `id` never
   ran, the host marker attribute was stripped, and the container's query found no sections at all.
   The spy stayed silent: no `activeSectionChange`, ever, with nothing in the console to explain it.
 
     Consumers who hit this had to bind the id twice, once as `id` and once as
-  `[hubNavScrollSpySection]`, to get back the behaviour the directive already promised. The
-  fallback is now falsy-aware, so the documented bare form works and the explicit form is unchanged.
+    `[hubNavScrollSpySection]`, to get back the behaviour the directive already promised. The
+    fallback is now falsy-aware, so the documented bare form works and the explicit form is unchanged.
 
 - **The documentation described an API the library does not have.** Both READMEs tabulated a
   `variant` input — renamed to `color` back in 22.7.0 — so anyone copying the row got a compile
@@ -168,15 +182,15 @@ All notable changes to this project will be documented in this file.
   were already in.
 
     It reads as a layout collapse rather than as a missing panel, because applications lean on that
-  panel being there: one that hides its own in-page index while the nav shows a panel unfolds a
-  full-height menu the moment the panel disappears, pushing the page the reader had open below the
-  fold.
+    panel being there: one that hides its own in-page index while the nav shows a panel unfolds a
+    full-height menu the moment the panel disappears, pushing the page the reader had open below the
+    fold.
 
     The stack is now re-derived from the current URL instead of being left empty. Not merely kept,
-  because it can be stale: while collapsed the offcanvas menu navigates without touching the panels
-  — they are not rendered in that mode — so what survived would describe the page the user left.
-  When the route does not own the panels (`autoOpenFromRoute` off) the stack is whatever the user
-  opened by hand and nothing could rebuild it, so it is now left untouched rather than discarded.
+    because it can be stale: while collapsed the offcanvas menu navigates without touching the panels
+    — they are not rendered in that mode — so what survived would describe the page the user left.
+    When the route does not own the panels (`autoOpenFromRoute` off) the stack is whatever the user
+    opened by hand and nothing could rebuild it, so it is now left untouched rather than discarded.
 
     Worth naming, because removing that unconditional close also removed an incidental cleanup: on a
     **mixed** nav, where roots carry their own `expandMode`, widening while the active root is in
@@ -185,7 +199,7 @@ All notable changes to this project will be documented in this file.
     because the accordion branch returns before touching the stack — but the breakpoint round trip
     used to mask it and no longer does. Not fixed here: closing there changes what a mixed nav shows
     on every navigation, which is more than a patch should decide.
-  Either way the narrow/widen round trip ends where it started.
+    Either way the narrow/widen round trip ends where it started.
 
 ## [22.11.1] - 2026-09-01
 
@@ -208,7 +222,7 @@ All notable changes to this project will be documented in this file.
 
 - **The final panel of a vertical stack now closes its outer edge with a real border.** The library previously only drew each panel's leading divider and relied on a shadow for the terminal edge. Themes that remove or soften shadows therefore left the navigation visually open and could blend it with adjacent page chrome. The terminal panel now owns the matching border itself on both left and right sidebars.
 
-    The border sides are **physical**, not logical, and that is the second thing this fixes. The side a sidebar sits on is a layout decision — a nav configured to the right stays on the right when the document turns RTL — while a logical property turns with the text. Under RTL the closing border therefore landed on the sidebar's *inner* edge: measured at 0px outside and 1px inside. All four combinations of direction and side now put it on the outside.
+    The border sides are **physical**, not logical, and that is the second thing this fixes. The side a sidebar sits on is a layout decision — a nav configured to the right stays on the right when the document turns RTL — while a logical property turns with the text. Under RTL the closing border therefore landed on the sidebar's _inner_ edge: measured at 0px outside and 1px inside. All four combinations of direction and side now put it on the outside.
 
     And the terminal panel drops its shadow through `--hub-nav-panel-last-shadow` (default `none`) rather than being written off. "The border replaces the shadow" only holds for a theme that draws borders; one that separates its panels by shade or by a cast shadow was left with neither, and the shared `--hub-nav-panel-shadow` could not reach past this more specific rule. Set it to `var(--hub-nav-panel-shadow)` to keep the panel's own.
 
@@ -383,11 +397,11 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Aligned cross-layer token references with the canonical `ng-hub-ui-ds` names (no visual change; the components now follow the theme instead of only their inline fallback):
-  - `--hub-sys-z-index-*` → `--hub-sys-zindex-*`
-  - `--hub-sys-shadow-md` → `--hub-sys-shadow`
-  - `--hub-sys-state-hover-overlay` → `--hub-sys-state-hover-bg`
-  - `--hub-ref-border-radius-*` → `--hub-ref-radius-*`
-  - `--hub-ref-font-weight-normal` → `--hub-ref-font-weight-base`
+    - `--hub-sys-z-index-*` → `--hub-sys-zindex-*`
+    - `--hub-sys-shadow-md` → `--hub-sys-shadow`
+    - `--hub-sys-state-hover-overlay` → `--hub-sys-state-hover-bg`
+    - `--hub-ref-border-radius-*` → `--hub-ref-radius-*`
+    - `--hub-ref-font-weight-normal` → `--hub-ref-font-weight-base`
 
 ## [22.0.0] - 2026-06-17
 
@@ -395,7 +409,6 @@ All notable changes to this project will be documented in this file.
 
 - Aligned with Angular 22.
 - README documentation standardized.
-
 
 ## [21.1.1] - 2026-04-12
 

@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-nav",
-	"version": "22.14.3",
+	"version": "22.15.0",
 	"license": "MIT",
 	"description": "A flexible, accessible, and customizable navigation component for Angular 21, part of the ng-hub-ui family.",
 	"author": "Carlos Morcillo Fern\u00e1ndez <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
@@ -27,9 +27,9 @@
 		"angular21"
 	],
 	"peerDependencies": {
-		"@angular/common": ">=17.2.0",
-		"@angular/core": ">=17.2.0",
-		"@angular/router": ">=17.2.0",
+		"@angular/common": ">=17.3.0",
+		"@angular/core": ">=17.3.0",
+		"@angular/router": ">=17.3.0",
 		"ng-hub-ui-utils": ">=22.13.0"
 	},
 	"dependencies": {

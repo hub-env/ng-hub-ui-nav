@@ -80,3 +80,15 @@ No breaking changes were introduced in this release.
 
 - **Change**: The library major version aligns with Angular 21.
 - **Impact**: Consumers should use Angular 21 or newer when adopting `ng-hub-ui-nav` 21.x releases.
+
+## [22.15.0] - 2026-09-23
+
+### Angular below 17.3.0 is no longer supported
+
+- **Change**: the `@angular/*` peer ranges move from `>=17.2.0` to `>=17.3.0`.
+
+- **Why**: Its published `.d.ts` names `InputSignalWithTransform` or `OutputEmitterRef`, which Angular did not ship until 17.3.
+
+- **Impact — an application below 17.3.0 gets a peer warning where it used to get a build error.**
+  Nothing that worked stops working: those versions never compiled against this package. Upgrade
+  Angular to 17.3.0 or stay on the previous release.
