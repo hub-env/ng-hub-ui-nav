@@ -1,7 +1,8 @@
-import { Injectable, Signal, signal, computed, inject } from '@angular/core';
+import { Injectable, Signal, TemplateRef, signal, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HubTranslationService } from 'ng-hub-ui-utils';
 import { HubNavItem } from '../models/nav-item.model';
+import { HubNavItemIconContext } from '../models/nav-template-context.model';
 import { HubNavConfig, HubNavVerticalExpandMode } from '../models/nav-config.model';
 import { HubNavPanelState } from '../models/nav-panel-state.model';
 import { HUB_NAV_DEFAULT_LABELS, HUB_NAV_LABEL_KEYS, HubNavLabels } from '../models/nav-labels.model';
@@ -74,6 +75,17 @@ export class HubNavStateService {
 		? toSignal(this.translationSvc.translationObserver, { initialValue: null })
 		: signal(null).asReadonly();
 
+	/**
+	 * Template the owning nav wants drawn in place of an entry's icon class, if any.
+	 *
+	 * Carried here rather than passed down as an input: the item lists, the panels, the panel
+	 * container and the mobile drawer would each need one more `TemplateRef` input to forward,
+	 * and the flyouts rendered into `document.body` would need it forwarded by hand as well.
+	 * Every one of those views already injects this scoped service, so this is the channel the
+	 * component tree actually shares.
+	 */
+	private _iconTemplateSource = signal<Signal<TemplateRef<HubNavItemIconContext> | null>>(signal(null));
+
 	/** Stack of open panels for panel expand mode. */
 	private _panelStack = signal<HubNavPanelState[]>([]);
 
@@ -94,6 +106,9 @@ export class HubNavStateService {
 
 	/** Readonly host-declared active entry. Null while the route owns the mark. */
 	readonly activeItemId = computed(() => this._activeItemIdSource()());
+
+	/** Readonly icon template declared on the owning nav. Null when entries draw their icon class. */
+	readonly iconTemplate = computed(() => this._iconTemplateSource()());
 
 	/**
 	 * Whether the icon rail is effectively active. The rail is desktop-only
@@ -196,6 +211,18 @@ export class HubNavStateService {
 	 */
 	bindActiveItemId(source: Signal<string | null>): void {
 		this._activeItemIdSource.set(source);
+	}
+
+	/**
+	 * Points every entry of this nav at the glyph template the host resolved, held live for the
+	 * same reason {@link bindActiveItemId} holds its source: a content child only lands after
+	 * the first render, and copying it into a signal here would paint the class glyph once
+	 * before the projected one takes over.
+	 *
+	 * @param source - The nav's resolved icon template.
+	 */
+	bindIconTemplate(source: Signal<TemplateRef<HubNavItemIconContext> | null>): void {
+		this._iconTemplateSource.set(source);
 	}
 
 	/**
@@ -416,6 +443,104 @@ export class HubNavStateService {
 	}
 
 	/**
+	 * Re-reads every open panel against the current item tree.
+	 *
+	 * What a panel holds is a snapshot: the children its owning entry had the moment it was
+	 * opened. A consumer that hands the nav a new `items` array — a menu that finished loading,
+	 * a section that grew an entry, a badge that changed — was leaving the open panel painting
+	 * that snapshot, and only a route change with `autoOpenFromRoute` ever went back for the
+	 * real thing.
+	 *
+	 * Panels are matched to the menu by the id of their owning entry, which is sound because
+	 * every panel shows exactly that entry's children. Their ids survive, so the container does
+	 * not mount them again and no entrance animation replays. An owner that has left the tree
+	 * takes its panel with it, and with it every panel opened from inside it: there is nothing
+	 * left for those to be about.
+	 *
+	 * @param items - The current root item tree.
+	 */
+	syncPanelsWithItems(items: HubNavItem[]): void {
+		const stack = this._panelStack();
+
+		if (stack.length === 0) {
+			return;
+		}
+
+		const next: HubNavPanelState[] = [];
+
+		for (const panel of stack) {
+			const owner = this.findItemById(items, panel.parentItem.id);
+
+			if (!owner) {
+				break;
+			}
+
+			next.push({
+				...panel,
+				parentItem: owner,
+				items: owner.children ?? [],
+				history: panel.history.map((entry) => {
+					const entryOwner = this.findItemById(items, entry.parentItem.id);
+					return entryOwner ? { items: entryOwner.children ?? [], parentItem: entryOwner } : entry;
+				})
+			});
+		}
+
+		if (!this.panelStacksShowTheSame(stack, next)) {
+			this._panelStack.set(next);
+		}
+	}
+
+	/**
+	 * Whether two panel stacks paint the same thing, compared by reference.
+	 *
+	 * Reference equality is the right test here: an `items` input that did not change hands the
+	 * same objects back, so a stack rebuilt from it is element-for-element identical and must
+	 * not be written — writing it would wake every consumer of the stack on each render.
+	 *
+	 * @param current - The stack in the signal.
+	 * @param rebuilt - The stack just resolved against the item tree.
+	 */
+	private panelStacksShowTheSame(current: HubNavPanelState[], rebuilt: HubNavPanelState[]): boolean {
+		return (
+			current.length === rebuilt.length &&
+			current.every(
+				(panel, index) =>
+					panel.parentItem === rebuilt[index].parentItem &&
+					panel.items === rebuilt[index].items &&
+					panel.history.every(
+						(entry, entryIndex) =>
+							entry.parentItem === rebuilt[index].history[entryIndex].parentItem &&
+							entry.items === rebuilt[index].history[entryIndex].items
+					)
+			)
+		);
+	}
+
+	/**
+	 * Depth-first lookup of an entry by id, used to match open panels back to the live menu.
+	 *
+	 * @param items - Tree to walk.
+	 * @param id - Entry id to look for.
+	 * @returns The entry, or `null` when the tree no longer holds it.
+	 */
+	private findItemById(items: HubNavItem[], id: string): HubNavItem | null {
+		for (const item of items) {
+			if (item.id === id) {
+				return item;
+			}
+
+			const found = item.children?.length ? this.findItemById(item.children, id) : null;
+
+			if (found) {
+				return found;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Opens a new panel for the given parent item's children.
 	 * If the panel count has reached `panelMaxVisible`, drills down within the last panel instead.
 	 *
@@ -574,7 +699,7 @@ export class HubNavStateService {
 				}
 				return {
 					...panel,
-					history: [...panel.history, { items: panel.items, parentLabel: panel.parentItem.label }],
+					history: [...panel.history, { items: panel.items, parentItem: panel.parentItem }],
 					parentItem,
 					items,
 					isDrillDown: true
@@ -610,7 +735,7 @@ export class HubNavStateService {
 				return {
 					...p,
 					items: previous.items,
-					parentItem: { ...p.parentItem, label: previous.parentLabel },
+					parentItem: previous.parentItem,
 					history: newHistory,
 					isDrillDown: newHistory.length > 0
 				};

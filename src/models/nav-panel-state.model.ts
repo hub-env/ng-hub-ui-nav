@@ -7,8 +7,16 @@ export interface HubNavPanelHistoryEntry {
 	/** The items that were displayed before the drill-down. */
 	items: HubNavItem[];
 
-	/** The parent label of the previous level (shown in the header on back). */
-	parentLabel: string;
+	/**
+	 * The item those entries belonged to, restored verbatim when the reader goes back.
+	 *
+	 * It used to hold the label alone, so going back left the panel claiming a parent it was
+	 * not showing: the id stayed on the item drilled *into* while the entries were its
+	 * parent's. Anything that matches a panel to the menu by that id — reopening the same
+	 * section, re-reading a panel after the `items` input changed — was answering about the
+	 * wrong level.
+	 */
+	parentItem: HubNavItem;
 }
 
 /**

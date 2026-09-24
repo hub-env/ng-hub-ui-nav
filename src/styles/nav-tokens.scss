@@ -38,9 +38,15 @@
 	// the canonical design-system formula, so it follows the accent — and the
 	// variant — automatically, matching the ds `-subtle` tints exactly).
 	--hub-nav-accent-subtle: color-mix(in oklch, var(--hub-nav-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	// Strong/emphasis shade of the accent, mixed over the theme ink. Mirrors the
-	// design-system `-emphasis` role so the accent text reads with enough contrast.
-	--hub-nav-accent-emphasis: color-mix(in oklch, var(--hub-nav-accent) 80%, var(--hub-sys-color-ink, #212529));
+	// Strong/emphasis shade of the accent: the accent steered into the theme's emphasis
+	// window, which is the design-system `-emphasis` role. It used to be a percentage mix
+	// over the theme ink, and a percentage cannot darken a pale accent — the active item's
+	// label came out at 3.88:1 on the tint it sits on, where AA asks 4.5:1. Hue and chroma
+	// are untouched, so a themed nav keeps its colour.
+	--hub-nav-accent-emphasis: oklch(
+		from var(--hub-nav-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	// Contrast / on-color: text that sits ON the accent. Grayscale flip driven by
 	// the accent's own lightness (dark accents → white text, light accents → near
 	// black), recomputed at runtime with the accent — no second token needed.
@@ -74,11 +80,13 @@
 
 	// ── Item Hover ── (soft accent tint)
 	--hub-nav-item-hover-bg: color-mix(in oklch, var(--hub-nav-accent) 8%, var(--hub-sys-surface-page, #fff));
-	--hub-nav-item-hover-color: var(--hub-nav-accent);
+	// The accent as ink, not as a colour: hover and active paint their label on a tint of the
+	// accent, and the raw accent on its own tint is what failed to read.
+	--hub-nav-item-hover-color: var(--hub-nav-accent-emphasis);
 
 	// ── Item Active ── (soft tint + accent text + accent indicator bar)
 	--hub-nav-item-active-bg: var(--hub-nav-accent-subtle);
-	--hub-nav-item-active-color: var(--hub-nav-accent);
+	--hub-nav-item-active-color: var(--hub-nav-accent-emphasis);
 	--hub-nav-item-active-font-weight: var(--hub-ref-font-weight-semibold, 600);
 	--hub-nav-item-active-indicator-color: var(--hub-nav-accent);
 	--hub-nav-item-active-indicator-size: 3px;
@@ -228,7 +236,12 @@
 :host([data-variant]),
 .hub-nav[data-variant] {
 	--hub-nav-accent-subtle: color-mix(in oklch, var(--hub-nav-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	--hub-nav-accent-emphasis: color-mix(in oklch, var(--hub-nav-accent) 80%, var(--hub-sys-color-ink, #212529));
+	// Same window as the default block above: a variant is a different accent, not a different
+	// rule, and a percentage mix here would have left every custom accent with the defect.
+	--hub-nav-accent-emphasis: oklch(
+		from var(--hub-nav-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	--hub-nav-accent-on: oklch(from var(--hub-nav-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 	--hub-nav-bg: color-mix(in oklch, var(--hub-nav-accent) 5%, var(--hub-sys-surface-page, #fff));
 	--hub-nav-item-hover-bg: color-mix(in oklch, var(--hub-nav-accent) 8%, var(--hub-sys-surface-page, #fff));

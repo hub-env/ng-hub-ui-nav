@@ -182,7 +182,11 @@ describe('HubNavPanelComponent', () => {
 	it('should use the configured back and close labels', () => {
 		const state = TestBed.inject(HubNavStateService);
 		state.setConfig({ ...state.config(), labels: { goBack: 'Volver', closePanel: 'Cerrar panel' } });
-		componentRef.setInput('panel', { ...mockPanel, isDrillDown: true, history: [{ items: [], parentLabel: 'Root' }] });
+		componentRef.setInput('panel', {
+			...mockPanel,
+			isDrillDown: true,
+			history: [{ items: [], parentItem: { id: 'root', label: 'Root', type: 'dropdown' } }]
+		});
 		fixture.detectChanges();
 		const back = fixture.nativeElement.querySelector('.hub-nav-panel__back');
 		const close = fixture.nativeElement.querySelector('.hub-nav-panel__close');

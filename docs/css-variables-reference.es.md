@@ -41,14 +41,14 @@ Importa los estilos de la librería y sobrescribe los tokens a nivel de componen
 | `--hub-nav-scrollbar-webkit-size`  | `0`                                 |
 | `--hub-nav-scrollbar-thumb-color`  | `transparent`                       |
 | `--hub-nav-scrollbar-track-color`  | `transparent`                       |
-| `--hub-nav-scrollbar-thumb-radius` | `var(--hub-ref-radius-pill, 999px)` |
+| `--hub-nav-scrollbar-thumb-radius` | `var(--hub-ref-radius-pill, 50rem)` |
 
 ## Surface and Borders
 
 | Variable                  | Default                                                                                                                                                                                                                                                                                                                        |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `--hub-nav-accent`        | `var(--hub-sys-color-primary, #0d6efd)`                                                                                                                                                                                                                                                                                        |
-| `--hub-nav-accent-subtle` | `color-mix(in srgb, var(--hub-nav-accent) 14%, var(--hub-sys-surface-page, #fff))`                                                                                                                                                                                                                                             |
+| `--hub-nav-accent-subtle` | `color-mix(in oklch, var(--hub-nav-accent) 12%, var(--hub-sys-surface-page, #ffffff))`                                                                                                                                                                                                                                             |
 | `--hub-nav-bg`            | `color-mix(in srgb, var(--hub-nav-accent) 5%, var(--hub-sys-surface-page, #fff))`                                                                                                                                                                                                                                              |
 | `--hub-nav-bg-image`      | `none` — una `<image>` que se pinta sobre `--hub-nav-bg`. Se usa para vestir la barra con un degradado: un degradado sustituido dentro de `background-color` da un valor inválido y tira la declaración entera, así que la barra se quedaría sin fondo; por eso viaja en su propia propiedad, con el color debajo como reserva |
 | `--hub-nav-color`         | `var(--hub-sys-text-primary, #212529)`                                                                                                                                                                                                                                                                                         |
@@ -71,15 +71,15 @@ El único punto `--hub-nav-accent` (re-basado según el input `variant`) control
 
 | Variable                                | Default                                                                           |
 | --------------------------------------- | --------------------------------------------------------------------------------- |
-| `--hub-nav-item-padding-x`              | `var(--hub-ref-space-3, 1rem)`                                                    |
+| `--hub-nav-item-padding-x`              | `var(--hub-nav-mobile-item-padding-inline, 0.75rem)`                                                    |
 | `--hub-nav-item-padding-y`              | `var(--hub-ref-space-2, 0.5rem)`                                                  |
 | `--hub-nav-item-color`                  | `var(--hub-sys-text-primary, #212529)`                                            |
 | `--hub-nav-item-font-size`              | `var(--hub-ref-font-size-base, 1rem)`                                             |
-| `--hub-nav-item-font-weight`            | `var(--hub-ref-font-weight-normal, 400)`                                          |
+| `--hub-nav-item-font-weight`            | `var(--hub-ref-font-weight-base, 400)`                                          |
 | `--hub-nav-item-border-radius`          | `var(--hub-ref-border-radius-sm, 0.25rem)`                                        |
-| `--hub-nav-item-transition`             | `var(--hub-sys-transition-fast, 150ms ease)`                                      |
-| `--hub-nav-item-hover-bg`               | `color-mix(in srgb, var(--hub-nav-accent) 8%, var(--hub-sys-surface-page, #fff))` |
-| `--hub-nav-item-hover-color`            | `var(--hub-nav-accent)`                                                           |
+| `--hub-nav-item-transition`             | `var(--hub-sys-transition-fast, all 0.15s ease-in-out)`                                      |
+| `--hub-nav-item-hover-bg`               | `color-mix(in oklch, var(--hub-nav-accent) 8%, var(--hub-sys-surface-page, #fff))` |
+| `--hub-nav-item-hover-color`            | `var(--hub-nav-accent-emphasis)`                                                           |
 | `--hub-nav-item-active-bg`              | `var(--hub-nav-accent-subtle)`                                                    |
 | `--hub-nav-item-active-color`           | `var(--hub-nav-accent)`                                                           |
 | `--hub-nav-item-active-font-weight`     | `var(--hub-ref-font-weight-semibold, 600)`                                        |
@@ -94,11 +94,11 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 
 | Variable                           | Default                                                                       |
 | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `--hub-nav-dropdown-bg`            | `var(--hub-sys-surface-elevated, #fff)`                                       |
+| `--hub-nav-dropdown-bg`            | `var(--hub-sys-surface-elevated, #f8f9fa)`                                       |
 | `--hub-nav-dropdown-color`         | `var(--hub-sys-text-primary, #212529)`                                        |
 | `--hub-nav-dropdown-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)`                                |
-| `--hub-nav-dropdown-border-radius` | `var(--hub-nav-item-border-radius, var(--hub-ref-border-radius-sm, 0.25rem))` |
-| `--hub-nav-dropdown-shadow`        | `var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15))`                 |
+| `--hub-nav-dropdown-border-radius` | `var(--hub-nav-item-border-radius, var(--hub-ref-radius-sm, 0.25rem))` |
+| `--hub-nav-dropdown-shadow`        | `var(--hub-sys-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15))`                 |
 | `--hub-nav-dropdown-padding-y`     | `var(--hub-ref-space-2, 0.5rem)`                                              |
 | `--hub-nav-dropdown-min-width`     | `12rem`                                                                       |
 | `--hub-nav-dropdown-zindex`        | `var(--hub-sys-zindex-dropdown, 1000)`                                        |
@@ -114,8 +114,8 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | `--hub-nav-header-color`                           | `var(--hub-sys-text-muted, #6c757d)`           |
 | `--hub-nav-header-padding-x`                       | `var(--hub-ref-space-3, 1rem)`                 |
 | `--hub-nav-header-padding-y`                       | `var(--hub-ref-space-1, 0.25rem)`              |
-| `--hub-nav-header-margin-top`                      | `var(--hub-ref-space-3, 0.75rem)`              |
-| `--hub-nav-header-margin-inline-start`             | `var(--hub-ref-space-3, 0.75rem)`              |
+| `--hub-nav-header-margin-top`                      | `var(--hub-ref-space-3, 1rem)`              |
+| `--hub-nav-header-margin-inline-start`             | `var(--hub-ref-space-3, 1rem)`              |
 | `--hub-nav-header-horizontal-padding-inline-start` | `2rem`                                         |
 | `--hub-nav-separator-color`                        | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-nav-separator-margin-y`                     | `var(--hub-ref-space-2, 0.5rem)`               |
@@ -128,9 +128,9 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | `--hub-nav-badge-padding-x`     | `0.5em`                                    |
 | `--hub-nav-badge-padding-y`     | `0.25em`                                   |
 | `--hub-nav-badge-bg`            | `var(--hub-sys-color-danger, #dc3545)`     |
-| `--hub-nav-badge-color`         | `#fff`                                     |
-| `--hub-nav-badge-border-radius` | `var(--hub-ref-border-radius-pill, 50rem)` |
-| `--hub-nav-icon-size`           | `var(--hub-ref-icon-size, 1.25rem)`        |
+| `--hub-nav-badge-color`         | `var(--hub-ref-color-white, #fff)`                                     |
+| `--hub-nav-badge-border-radius` | `var(--hub-ref-radius-pill, 50rem)` |
+| `--hub-nav-icon-size`           | `var(--hub-ref-icon-size, 1em)`        |
 | `--hub-nav-icon-gap`            | `var(--hub-ref-space-2, 0.5rem)`           |
 
 ## Toggler y Mobile
@@ -142,13 +142,13 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | `--hub-nav-toggler-font-size`               | `var(--hub-ref-font-size-lg, 1.25rem)`         |
 | `--hub-nav-toggler-color`                   | `var(--hub-sys-text-primary, #212529)`         |
 | `--hub-nav-toggler-border-color`            | `var(--hub-sys-border-color-default, #dee2e6)` |
-| `--hub-nav-toggler-border-radius`           | `var(--hub-ref-border-radius-sm, 0.25rem)`     |
+| `--hub-nav-toggler-border-radius`           | `var(--hub-ref-radius-sm, 0.25rem)`     |
 | `--hub-nav-mobile-bg`                       | `var(--hub-sys-surface-page, #fff)`            |
 | `--hub-nav-mobile-color`                    | `var(--hub-sys-text-primary, #212529)`         |
 | `--hub-nav-mobile-width`                    | `18rem`                                        |
 | `--hub-nav-mobile-zindex`                   | `var(--hub-sys-zindex-fixed, 1030)`            |
 | `--hub-nav-mobile-backdrop-bg`              | `rgba(0, 0, 0, 0.5)`                           |
-| `--hub-nav-mobile-transition`               | `var(--hub-sys-transition-base, 300ms ease)`   |
+| `--hub-nav-mobile-transition`               | `var(--hub-sys-transition-base, all 0.2s ease-in-out)`   |
 | `--hub-nav-mobile-accordion-gap`            | `component-defined`                            |
 | `--hub-nav-mobile-accordion-nested-spacing` | `component-defined`                            |
 | `--hub-nav-mobile-body-padding-block-end`   | `component-defined`                            |
@@ -192,15 +192,15 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | Variable                              | Default                                                             |
 | ------------------------------------- | ------------------------------------------------------------------- |
 | `--hub-nav-accordion-indent`          | `var(--hub-ref-space-3, 1rem)`                                      |
-| `--hub-nav-accordion-transition`      | `var(--hub-sys-transition-collapse, 350ms ease)`                    |
+| `--hub-nav-accordion-transition`      | `0.35s ease`                    |
 | `--hub-nav-panel-width`               | `16rem`                                                             |
-| `--hub-nav-panel-bg`                  | `var(--hub-sys-surface-elevated, #fff)`                             |
+| `--hub-nav-panel-bg`                  | `var(--hub-sys-surface-elevated, #f8f9fa)`                             |
 | `--hub-nav-panel-color`               | `var(--hub-sys-text-primary, #212529)`                              |
 | `--hub-nav-panel-border-color`        | `var(--hub-sys-border-color-default, #dee2e6)`                      |
 | `--hub-nav-panel-border-width`        | `1px`                                                               |
 | `--hub-nav-panel-shadow`              | `var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075))` |
 | `--hub-nav-panel-zindex`              | `var(--hub-sys-zindex-dropdown, 1000)`                              |
-| `--hub-nav-panel-transition`          | `transform var(--hub-sys-transition-base, 300ms ease)`              |
+| `--hub-nav-panel-transition`          | `var(--hub-sys-transition-base, all 0.2s ease-in-out)`              |
 | `--hub-nav-panel-header-height`       | `3rem`                                                              |
 | `--hub-nav-panel-header-bg`           | `var(--hub-sys-surface-page, #fff)`                                 |
 | `--hub-nav-panel-header-border-color` | `var(--hub-sys-border-color-default, #dee2e6)`                      |
@@ -208,5 +208,5 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | `--hub-nav-panel-header-font-weight`  | `var(--hub-ref-font-weight-semibold, 600)`                          |
 | `--hub-nav-panel-header-padding-x`    | `var(--hub-ref-space-3, 1rem)`                                      |
 | `--hub-nav-panel-back-color`          | `var(--hub-sys-text-primary, #212529)`                              |
-| `--hub-nav-panel-back-hover-bg`       | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.04))`                |
+| `--hub-nav-panel-back-hover-bg`       | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))`                |
 | `--hub-nav-panel-back-size`           | `2rem`                                                              |

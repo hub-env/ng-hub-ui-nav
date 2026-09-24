@@ -2,6 +2,64 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.17.0] - 2026-09-24
+
+### Added
+
+- **An entry's glyph can be projected instead of named with a class.** `HubNavItem.icon` is a CSS
+  class, which ties a menu to whichever icon font the page already loads and leaves an application
+  on `ng-hub-ui-icons` keeping a second icon vocabulary alive just for its navigation. An
+  `ng-template hubNavItemIcon` — or the matching `[iconTemplate]` input — now draws that glyph
+  instead, with the entry as its implicit context and a `rail` flag for the narrow column:
+
+    ```html
+    <hub-nav [items]="items">
+        <ng-template hubNavItemIcon let-item>
+            <hub-icon [name]="item.icon" />
+        </ng-template>
+    </hub-nav>
+    ```
+
+    `icon` keeps meaning whatever the application decides — a registry name, a pack prefix — and
+    the library takes no dependency on any icon package. Entries with no `icon` are untouched, so
+    the rail initial still shows and nothing about the layout moves.
+
+### Changed
+
+- **BREAKING — a vertical nav no longer forces itself to the full width of its container.** The
+  component wrote `width: 100%` on its own host for every vertical orientation, which is invisible
+  in a block container and ruinous anywhere else: a sidebar placed in a flex row or a grid track
+  next to its content took the whole row. The host is left at `width: auto` now, so it fills a
+  block container exactly as before and asks for its content's width as a flex or grid item. The
+  rail keeps its explicit width from `--hub-nav-rail-width`. See BREAKING_CHANGES.md.
+
+- **BREAKING — `HubNavPanelHistoryEntry` carries the entry it came from, not its label.**
+  `parentLabel: string` is now `parentItem: HubNavItem`. Going back out of a drill-down used to
+  leave the panel claiming a parent it was not showing — the id stayed on the entry drilled
+  *into* while the list was its parent's — so anything matching a panel to the menu by that id
+  was answering about the wrong level. See BREAKING_CHANGES.md.
+
+### Fixed
+
+- **BREAKING (visual) — the label of a hovered or active entry is readable on the tint it sits
+  on.** Both painted the raw `--hub-nav-accent`, and an accent is chosen to be a colour, not
+  ink: on the 12% wash the active entry sits on, the default primary measured **3.88:1**, where
+  WCAG AA asks 4.5:1. `--hub-nav-accent-emphasis` is now the accent steered into the theme's
+  emphasis window instead of a percentage mixed over the theme ink — a percentage cannot darken
+  a pale accent — and both labels read it. Hue and chroma are untouched, so a themed nav keeps
+  its colour; every accent darkens, not only the ones that failed.
+- The same derivation now applies in the block that re-bases a variant's accent, which is the
+  one the open variant set runs through. It had been left on the percentage mix, so a custom
+  accent kept the defect after the built-ins lost it.
+
+- **An open panel follows the `items` input.** A panel kept the children its entry had the moment
+  it opened, so a menu that finished loading, a section that grew an entry or a badge that changed
+  reached the component and the panel went on painting the old list. Panels are now re-read
+  against the tree on every `items` change, keeping their ids so nothing is mounted again and no
+  entrance animation replays; a panel whose entry has left the menu closes, and takes the panels
+  opened from inside it with it. Only the route-driven path ever did this before, and only with
+  `autoOpenFromRoute` on.
+
 ## [22.16.0] - 2026-09-23
 
 ### Added

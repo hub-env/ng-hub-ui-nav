@@ -29,6 +29,8 @@ import { HubNavStateService } from '../../services/nav-state.service';
 import { HubNavStartDirective } from '../../directives/nav-start.directive';
 import { HubNavEndDirective } from '../../directives/nav-end.directive';
 import { HubNavItemTemplateDirective } from '../../directives/nav-item-template.directive';
+import { HubNavItemIconDirective } from '../../directives/nav-item-icon.directive';
+import { HubNavItemIconContext } from '../../models/nav-template-context.model';
 import { HubNavTogglerComponent } from '../nav-toggler/nav-toggler.component';
 import { HubNavMobilePanelComponent } from '../nav-mobile-panel/nav-mobile-panel.component';
 import { HubNavPanelContainerComponent } from '../nav-panel-container/nav-panel-container.component';
@@ -72,7 +74,6 @@ let hubNavOverlayOwnerCounter = 0;
 		'[class.hub-nav--has-panels]': 'hasPanels()',
 		'[attr.data-variant]': 'color() ?? null',
 		'[style.--hub-nav-accent]': 'groupAccent()',
-		'[style.width]': 'hostWidth()',
 		'[style.align-self]': 'resolvedOrientation() === "vertical" ? "stretch" : null',
 		'[style.--hub-nav-sticky-top]': 'resolvedConfig().stickyTop',
 		'[style.display]': 'resolvedOrientation() === "vertical" ? "flex" : null',
@@ -129,6 +130,13 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	readonly itemTemplate = input<TemplateRef<unknown> | null>(null);
 
 	/**
+	 * Optional template drawn in place of the icon class of every entry that declares an `icon`
+	 * (via input binding). The `hubNavItemIcon` directive is the usual way in; this input exists
+	 * for a host that already holds the template, mirroring `itemTemplate`.
+	 */
+	readonly iconTemplate = input<TemplateRef<HubNavItemIconContext> | null>(null);
+
+	/**
 	 * When `true`, the component automatically opens the panels matching the
 	 * active router URL on initialization and on every subsequent navigation.
 	 * Useful for sidebar navigations where the URL should drive the open state.
@@ -166,6 +174,9 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	/** Item template projected via `hubNavItemTemplate` directive. */
 	private readonly itemTemplateDirective = contentChild(HubNavItemTemplateDirective);
 
+	/** Icon template projected via `hubNavItemIcon` directive. */
+	private readonly iconTemplateDirective = contentChild(HubNavItemIconDirective);
+
 	/** Resolved start slot template (from directive content projection). */
 	readonly startTemplate = computed(() => this.startDirective()?.template ?? null);
 
@@ -174,6 +185,9 @@ export class HubNavComponent implements OnInit, OnDestroy {
 
 	/** Resolved item template: directive takes priority over input. */
 	readonly resolvedItemTemplate = computed(() => this.itemTemplateDirective()?.template ?? this.itemTemplate());
+
+	/** Resolved icon template: directive takes priority over input. */
+	readonly resolvedIconTemplate = computed(() => this.iconTemplateDirective()?.template ?? this.iconTemplate());
 
 	/** Start slot context. */
 	readonly startContext = computed(() => ({
@@ -283,18 +297,6 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	/** Whether the desktop icon rail is effectively active. */
 	readonly isRailActive = computed(() => this.state.railActive());
 
-	/**
-	 * Inline host width. Vertical navs stretch to their container; while the
-	 * rail is active the inline style is dropped so the stylesheet rule bound
-	 * to `--hub-nav-rail-width` controls the host width instead.
-	 */
-	readonly hostWidth = computed(() => {
-		if (this.resolvedOrientation() !== 'vertical') {
-			return null;
-		}
-		return this.isRailActive() ? null : '100%';
-	});
-
 	/** Mirrors the rail input into the scoped state service. */
 	private railSyncEffect = effect(() => {
 		this.state.setRail(this.rail());
@@ -340,6 +342,24 @@ export class HubNavComponent implements OnInit, OnDestroy {
 			this.teardownBreakpointListener();
 			this.setupBreakpointListener();
 		}
+	});
+
+	/**
+	 * Keeps the open drill-down panels reading from the `items` input.
+	 *
+	 * A panel is opened with the children its entry had at that moment, so a consumer that hands
+	 * the nav a new menu — one that finished loading, a section that grew an entry — left the
+	 * open panel showing the old one. The route-driven path already re-read them, but only on
+	 * the next navigation and only when `autoOpenFromRoute` is on, which leaves every nav driven
+	 * by clicks alone with a panel that never changes.
+	 *
+	 * `untracked` for the same reason as {@link routeSyncEffect}: what this reacts to is the
+	 * menu, and the body reads and writes the panel stack.
+	 */
+	private itemsSyncEffect = effect(() => {
+		const items = this.items();
+
+		untracked(() => this.state.syncPanelsWithItems(items));
 	});
 
 	/**
@@ -463,6 +483,7 @@ export class HubNavComponent implements OnInit, OnDestroy {
 		// a change-detection pass behind it, so the first render after the mark moves still
 		// paints the entry it moved off — for a scroll spy, that is every mark it reports.
 		this.state.bindActiveItemId(this.activeItemId);
+		this.state.bindIconTemplate(this.resolvedIconTemplate);
 	}
 
 	/** @inheritDoc */

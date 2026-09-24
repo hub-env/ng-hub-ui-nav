@@ -2,6 +2,74 @@
 
 This document tracks breaking changes in the `ng-hub-ui-nav` library.
 
+## Version 22.17.0
+
+### A hovered or active entry's label changes colour
+
+- **Change**: `--hub-nav-item-hover-color` and `--hub-nav-item-active-color` read
+  `--hub-nav-accent-emphasis` instead of the raw `--hub-nav-accent`, and that role is now the
+  accent steered into the theme's emphasis window rather than a percentage mixed over the ink.
+
+- **Why**: both labels are painted on a tint of the same accent, so the pair is composed, not
+  declared — and the raw accent on its own 12% wash measured 3.88:1 for the default primary,
+  under the 4.5:1 a label is owed. A percentage mix cannot darken a pale accent, which is why
+  the old derivation could not fix it.
+
+- **Impact**: the hover and active label of every accent darkens, built-in or custom. Hue and
+  chroma are untouched, so a themed nav still reads as its own colour. Backgrounds, indicators
+  and the on-accent flip do not move.
+
+- **What happens if you do nothing**: nothing stops compiling, and those labels darken. A
+  screenshot test of a hovered or active entry will differ.
+
+- **Migration**: none. To keep the raw accent on the label — accepting that it may not reach
+  4.5:1 on the tint behind it — point the slot back at it:
+
+```css
+hub-nav {
+	--hub-nav-item-active-color: var(--hub-nav-accent);
+}
+```
+
+### A vertical `hub-nav` no longer sets its own width to 100%
+
+- **Change**: the component wrote `width: 100%` inline on its host for every vertical orientation.
+  It writes nothing now, leaving the host at `width: auto`. The rail is the one exception and
+  keeps its explicit `--hub-nav-rail-width`.
+- **Impact**: in a block container nothing moves — a block-level box at `width: auto` already
+  fills its container, and the `align-self: stretch` the component sets keeps it filling a flex
+  column. What changes is every layout where the percentage was resolved against something other
+  than the space meant for the sidebar: placed in a flex row or a grid track beside its content,
+  the nav asked for the whole track and left the content nothing. Those layouts now get a sidebar
+  the width of its own entries. A layout built around the old behaviour — a nav in a flex row
+  that was expected to fill it — has to say so.
+- **Migration**: give the nav the width you mean, on your side of the boundary.
+
+    ```scss
+    .app-shell__sidebar hub-nav {
+        width: 16rem; // or flex: 0 0 16rem;
+    }
+    ```
+
+### `HubNavPanelHistoryEntry.parentLabel` becomes `parentItem`
+
+- **Change**: a drill-down history entry used to record the label of the level it came from. It
+  records the whole entry now: `parentLabel: string` → `parentItem: HubNavItem`.
+- **Impact**: only code that reads or builds `HubNavPanelState.history` by hand, which is internal
+  state of an open panel rather than something a menu declares. It does not compile until it is
+  changed, so nothing fails silently. The panel header still shows the same label, taken from
+  `parentItem.label`.
+- **Migration**: read the label off the item.
+
+    ```ts
+    const label = entry.parentItem.label; // was entry.parentLabel
+    ```
+
+  The reason for the change is behavioural: coming back out of a drill-down used to rebuild the
+  parent as `{ ...drilledItem, label: previousLabel }`, so the panel's `parentItem.id` named the
+  level it had just left rather than the one it was showing. Reopening that section, or matching
+  the panel back to a menu that changed, was answering about the wrong level.
+
 ## Version 22.16.0
 
 ### `itemClick` fires for entries that carry no route (behavioural change)

@@ -259,6 +259,20 @@ describe('HubNavStateService', () => {
 			expect(service.panelStack()[0].isDrillDown).toBe(false);
 		});
 
+		it('should restore the entry the panel came back to, not just its label', () => {
+			service.setConfig({
+				...service.config(),
+				panelMaxVisible: 1
+			});
+			service.openPanel(parentItem);
+			service.openPanel(parentItem2); // drills down
+			const panelId = service.panelStack()[0].id;
+
+			service.navigateBackInPanel(panelId);
+
+			expect(service.panelStack()[0].parentItem).toBe(parentItem);
+		});
+
 		it('should close panel if navigating back with no history', () => {
 			service.openPanel(parentItem);
 			const panelId = service.panelStack()[0].id;

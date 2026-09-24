@@ -2,7 +2,7 @@
 
 This table details the functionalities of the `ng-hub-ui-nav` library and indicates which ones are covered by interactive examples.
 
-The public surface is one root component, `hub-nav`, the child components it renders (`hub-nav-item`, `hub-nav-item-list`, `hub-nav-panel`, `hub-nav-panel-container`, `hub-nav-separator`), five directives, and the configuration and state services.
+The public surface is one root component, `hub-nav`, the child components it renders (`hub-nav-item`, `hub-nav-item-list`, `hub-nav-panel`, `hub-nav-panel-container`, `hub-nav-separator`), six directives, and the configuration and state services.
 
 ## Component (`hub-nav`)
 
@@ -21,6 +21,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 |                       | Per-item class (`cssClass`), painted on the item element                  |       ❌        |
 |                       | Per-item active flag (`active`)                                           |       ❌        |
 |                       | Arbitrary payload (`data`)                                                |       ❌        |
+|                       | Open panels re-read a replaced `items` tree                               |       ❌        |
 | **Layout**            | Horizontal orientation                                                    |       ✅        |
 |                       | Vertical orientation                                                      |       ✅        |
 |                       | `accordion` vertical expand mode (`verticalExpandMode`)                   |       ✅        |
@@ -59,6 +60,8 @@ The public surface is one root component, `hub-nav`, the child components it ren
 |                       | `inDrawer` slot context flag                                              |       ❌        |
 |                       | `hubNavItemTemplate` directive                                            |       ✅        |
 |                       | `itemTemplate` input                                                      |       ❌        |
+|                       | `hubNavItemIcon` directive, replacing the glyph of entries with an `icon` |       ❌        |
+|                       | `iconTemplate` input                                                      |       ❌        |
 | **Outputs**           | `itemClick`, for entries with and without a route                         |       ✅        |
 |                       | `dropdownOpen` / `dropdownClose`                                          |       ✅        |
 |                       | `mobileToggle`                                                            |       ✅        |
@@ -79,6 +82,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 | **Slots**      | `hubNavStart`                                                        |       ✅        |
 |                | `hubNavEnd`                                                          |       ✅        |
 |                | `hubNavItemTemplate`                                                 |       ✅        |
+|                | `hubNavItemIcon`                                                     |       ❌        |
 | **Scroll spy** | `hubNavScrollSpy` container (`enabled`, `offset`, `sectionSelector`) |       ❌        |
 |                | `hubNavScrollSpySection` marker, bare or with an explicit id         |       ❌        |
 |                | `activeSectionChange` output                                         |       ❌        |

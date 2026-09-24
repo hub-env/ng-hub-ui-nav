@@ -44,6 +44,10 @@ nav {
 }
 
 // ── Vertical ──
+// The host keeps `width: auto` on purpose. As a block-level box it already fills
+// its container, and as a flex or grid item it takes the width its content asks
+// for — which a hard 100% turned into the whole track, leaving nothing for the
+// content the sidebar sits next to.
 :host(.hub-nav--vertical) nav {
 	flex: 1;
 	min-height: 0;
@@ -343,8 +347,9 @@ nav {
 }
 
 // ── Rail (desktop icon-only sidebar) ──
-// The host width is stylesheet-driven here (the inline 100% is dropped while
-// the rail is active) so `--hub-nav-rail-width` stays the single override hook.
+// The only width this component sets on its own host. Everywhere else the host
+// is left at `width: auto` — see the vertical block above — so that
+// `--hub-nav-rail-width` stays the single override hook here.
 :host(.hub-nav--rail) {
 	width: var(--hub-nav-rail-width, 4rem);
 	transition: var(--hub-nav-rail-transition, width 0.2s ease-in-out);

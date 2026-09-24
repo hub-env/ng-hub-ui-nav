@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.16.0` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.17.0` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -65,7 +65,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 - Vertical child expansion modes: `accordion`, `flyout`, and `panel`.
 - Stacked panel drill-down navigation with configurable visible panel count.
 - Projected `hubNavStart` and `hubNavEnd` slots.
-- Custom item rendering with `hubNavItemTemplate`.
+- Custom item rendering with `hubNavItemTemplate`, and a projected glyph with `hubNavItemIcon`.
 - Router-aware active states with fragment and query param support.
 - Scroll-spy helpers for documentation pages and one-page layouts.
 - Sticky vertical navigation support.
@@ -201,6 +201,7 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 | `config`            | `Partial<HubNavConfig>`                                                            | `{}`                             | Per-instance config merged with global defaults.                                                                                                                                                                                                                                                                                                                                         |
 | `navClass`          | `string`                                                                           | `''`                             | Additional class applied to the internal `<nav>`.                                                                                                                                                                                                                                                                                                                                        |
 | `itemTemplate`      | `TemplateRef<unknown> \| null`                                                     | `null`                           | Optional custom item template.                                                                                                                                                                                                                                                                                                                                                           |
+| `iconTemplate`      | `TemplateRef<HubNavItemIconContext> \| null`                                       | `null`                           | Glyph drawn in place of the icon class, for entries that declare an `icon`. The `hubNavItemIcon` directive is the usual way in; this input is for a host that already holds the template.                                                                                                                                                                                                 |
 | `activeItemId`      | `string \| null` (two-way `model`)                                                 | `null`                           | Entry to mark active, by `id` or `fragment`, when the router is not what says where the reader is. While it is set it answers for the whole menu: route matching stands down, so the mark cannot land on two entries at once, and the marked entry announces `aria-current="location"`. Bind with `[(activeItemId)]`.                                                                    |
 | `autoOpenFromRoute` | `boolean`                                                                          | `false`                          | Opens matching dropdowns/panels from the current route, and leaves exactly one section open when roots expand differently: arriving at an accordion root drops the panel of the panel root you left, and the other way round. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
 | `rail`              | `boolean` (two-way `model`)                                                        | `false`                          | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`.                                                                                                                                                                                                                                                                                      |
@@ -319,6 +320,7 @@ marked on its exact route:
 - `hubNavStart`: projects content into the start slot.
 - `hubNavEnd`: projects content into the end slot.
 - `hubNavItemTemplate`: overrides item rendering.
+- `hubNavItemIcon`: draws the glyph of every entry that declares an `icon`, leaving the rest of the item alone. Context: the entry as `$implicit`, plus `rail`.
 - `hubNavScrollSpy`: tracks visible sections in a scroll container. Takes `enabled`, `offset`, `sectionSelector`, `nav`, `scrollContainer` and `clickSettleMs`; emits `activeSectionChange` and exposes `scrollTo(sectionId, behavior?)`.
 - `hubNavScrollSpySection`: marks a section as spy-trackable.
 

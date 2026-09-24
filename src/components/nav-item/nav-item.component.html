@@ -21,11 +21,7 @@
 		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
-		@if (item().icon) {
-			<span class="hub-nav-item__icon" [class]="item().icon" aria-hidden="true"></span>
-		} @else if (railInitial()) {
-			<span class="hub-nav-item__initial" aria-hidden="true">{{ railInitial() }}</span>
-		}
+		<ng-container [ngTemplateOutlet]="glyph" />
 		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
@@ -52,11 +48,7 @@
 			[hubTooltipPlacement]="railTooltipPlacement()"
 			(click)="onRouteItemClick($event)"
 		>
-			@if (item().icon) {
-				<span class="hub-nav-item__icon" [class]="item().icon" aria-hidden="true"></span>
-			} @else if (railInitial()) {
-				<span class="hub-nav-item__initial" aria-hidden="true">{{ railInitial() }}</span>
-			}
+			<ng-container [ngTemplateOutlet]="glyph" />
 			<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
 			@if (item().badge) {
 				<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
@@ -98,11 +90,7 @@
 		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
-		@if (item().icon) {
-			<span class="hub-nav-item__icon" [class]="item().icon" aria-hidden="true"></span>
-		} @else if (railInitial()) {
-			<span class="hub-nav-item__initial" aria-hidden="true">{{ railInitial() }}</span>
-		}
+		<ng-container [ngTemplateOutlet]="glyph" />
 		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
@@ -126,14 +114,29 @@
 		[hubTooltipPlacement]="railTooltipPlacement()"
 		(click)="onItemClick($event)"
 	>
-		@if (item().icon) {
-			<span class="hub-nav-item__icon" [class]="item().icon" aria-hidden="true"></span>
-		} @else if (railInitial()) {
-			<span class="hub-nav-item__initial" aria-hidden="true">{{ railInitial() }}</span>
-		}
+		<ng-container [ngTemplateOutlet]="glyph" />
 		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
 		}
 	</button>
 }
+
+<!--
+	The entry's glyph, shared by every branch above. A projected `hubNavItemIcon` template draws
+	inside the same wrapper the icon class would have dressed, so nothing about the layout moves;
+	an entry with no icon is left alone, which is what keeps the rail initial working.
+-->
+<ng-template #glyph>
+	@if (item().icon) {
+		@if (iconTemplate(); as projected) {
+			<span class="hub-nav-item__icon" aria-hidden="true">
+				<ng-container [ngTemplateOutlet]="projected" [ngTemplateOutletContext]="iconContext()" />
+			</span>
+		} @else {
+			<span class="hub-nav-item__icon" [class]="item().icon" aria-hidden="true"></span>
+		}
+	} @else if (railInitial()) {
+		<span class="hub-nav-item__initial" aria-hidden="true">{{ railInitial() }}</span>
+	}
+</ng-template>

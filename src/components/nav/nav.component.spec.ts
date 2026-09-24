@@ -286,6 +286,28 @@ describe('HubNavComponent', () => {
 		});
 	});
 
+	describe('host width', () => {
+		it('should not write an inline width on a vertical nav, so a row beside it keeps its share', () => {
+			componentRef.setInput('config', { orientation: 'vertical' });
+			fixture.detectChanges();
+
+			expect(fixture.nativeElement.style.width).toBe('');
+		});
+
+		it('should not write an inline width on a collapsed vertical nav either', () => {
+			componentRef.setInput('config', { orientation: 'vertical' });
+			fixture.detectChanges();
+			component.state.setCollapsed(true);
+			fixture.detectChanges();
+
+			expect(fixture.nativeElement.style.width).toBe('');
+		});
+
+		it('should not write an inline width on a horizontal nav', () => {
+			expect(fixture.nativeElement.style.width).toBe('');
+		});
+	});
+
 	describe('rail mode', () => {
 		beforeEach(() => {
 			componentRef.setInput('config', { orientation: 'vertical' });
@@ -313,8 +335,8 @@ describe('HubNavComponent', () => {
 			expect(fixture.nativeElement.classList.contains('hub-nav--rail')).toBe(false);
 		});
 
-		it('should drop the inline full width so the rail token controls the host width', () => {
-			expect(fixture.nativeElement.style.width).toBe('100%');
+		it('should leave the host width to the stylesheet so the rail token controls it', () => {
+			expect(fixture.nativeElement.style.width).toBe('');
 			componentRef.setInput('rail', true);
 			fixture.detectChanges();
 			expect(fixture.nativeElement.style.width).toBe('');

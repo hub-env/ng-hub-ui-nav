@@ -3,6 +3,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HubOverflowTooltipDirective, HubTooltipDirective } from 'ng-hub-ui-utils';
 import { HubNavItem } from '../../models/nav-item.model';
+import { HubNavItemIconContext } from '../../models/nav-template-context.model';
 import { HubNavStateService } from '../../services/nav-state.service';
 
 /**
@@ -63,6 +64,15 @@ export class HubNavItemComponent {
 
 	/** Whether the desktop icon rail is active on the owning nav. */
 	readonly railActive = computed(() => this.state.railActive());
+
+	/** Glyph template declared on the owning nav, if any. Null leaves the icon class in charge. */
+	readonly iconTemplate = computed(() => this.state.iconTemplate());
+
+	/** Context handed to the glyph template. */
+	readonly iconContext = computed<HubNavItemIconContext>(() => ({
+		$implicit: this.item(),
+		rail: this.railActive()
+	}));
 
 	/**
 	 * Tooltip text for the item while the rail hides its label. Empty outside

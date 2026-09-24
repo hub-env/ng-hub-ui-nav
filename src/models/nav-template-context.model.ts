@@ -25,6 +25,20 @@ export interface HubNavItemTemplateContext {
 }
 
 /**
+ * Template context provided to the `hubNavItemIcon` directive.
+ */
+export interface HubNavItemIconContext {
+	/** The navigation item whose glyph is being rendered. Always carries an `icon`. */
+	$implicit: HubNavItem;
+
+	/**
+	 * Whether the desktop icon rail is active, where the glyph is all the reader sees of the
+	 * entry. Lets a projected icon grow, or swap for a denser variant, in that column alone.
+	 */
+	rail: boolean;
+}
+
+/**
  * Template context provided to the `hubNavStart` directive.
  */
 export interface HubNavStartTemplateContext {

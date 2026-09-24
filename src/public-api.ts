@@ -16,6 +16,7 @@ export * from './services/nav-state.service';
 
 // Directives
 export * from './directives/nav-end.directive';
+export * from './directives/nav-item-icon.directive';
 export * from './directives/nav-item-template.directive';
 export * from './directives/nav-scroll-spy-section.directive';
 export * from './directives/nav-scroll-spy.directive';

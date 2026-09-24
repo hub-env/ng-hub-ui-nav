@@ -79,7 +79,7 @@ The single `--hub-nav-accent` hook (re-based per the `color` input) drives the h
 | `--hub-nav-item-border-radius`          | `var(--hub-ref-radius-sm, 0.25rem)`                                                |
 | `--hub-nav-item-transition`             | `var(--hub-sys-transition-fast, all 0.15s ease-in-out)`                            |
 | `--hub-nav-item-hover-bg`               | `color-mix(in oklch, var(--hub-nav-accent) 8%, var(--hub-sys-surface-page, #fff))` |
-| `--hub-nav-item-hover-color`            | `var(--hub-nav-accent)`                                                            |
+| `--hub-nav-item-hover-color`            | `var(--hub-nav-accent-emphasis)`                                                            |
 | `--hub-nav-item-active-bg`              | `var(--hub-nav-accent-subtle)`                                                     |
 | `--hub-nav-item-active-color`           | `var(--hub-nav-accent)`                                                            |
 | `--hub-nav-item-active-font-weight`     | `var(--hub-ref-font-weight-semibold, 600)`                                         |
