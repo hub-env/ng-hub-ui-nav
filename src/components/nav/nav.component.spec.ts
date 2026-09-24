@@ -149,11 +149,11 @@ describe('HubNavComponent', () => {
 			expect(spy).toHaveBeenCalledWith(testItems[0]);
 		});
 
-		it('should not emit itemClick for non-link items', () => {
+		it('should emit itemClick for a section item that carries no route', () => {
 			const spy = vi.fn();
 			component.itemClick.subscribe(spy);
 			component.onItemClick({ item: testItems[2], event: new MouseEvent('click') });
-			expect(spy).not.toHaveBeenCalled();
+			expect(spy).toHaveBeenCalledWith(testItems[2]);
 		});
 
 		it('should emit mobileToggle on mobile toggle', () => {

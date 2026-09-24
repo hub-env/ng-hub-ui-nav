@@ -109,6 +109,22 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	 */
 	readonly rail = model<boolean>(false);
 
+	/**
+	 * Entry to mark active, named by its `id` or by its `fragment`, when the router is
+	 * not what says where the reader is — a rail over the sections of one page, a wizard
+	 * step, a selection held in a store.
+	 *
+	 * Set, it answers for the whole menu: route matching stands down, so the mark cannot
+	 * land on two entries at once, and the marked entry announces itself as
+	 * `aria-current="location"` rather than `page`. Set it back to `null` to hand the
+	 * decision to the URL again. A single entry that is always marked is better said on
+	 * the item itself, with `HubNavItem.active`.
+	 *
+	 * Two-way bindable: `[(activeItemId)]` reports back through `activeItemIdChange`,
+	 * which is how `hubNavScrollSpy` drives the mark when it is bound to this nav.
+	 */
+	readonly activeItemId = model<string | null>(null);
+
 	/** Optional custom template for rendering nav items (via input binding). */
 	readonly itemTemplate = input<TemplateRef<unknown> | null>(null);
 
@@ -171,7 +187,13 @@ export class HubNavComponent implements OnInit, OnDestroy {
 		rail: this.state.railActive()
 	}));
 
-	/** Emitted when a link item is clicked. */
+	/**
+	 * Emitted for every entry the reader can press, route or not.
+	 *
+	 * It used to fire only for an entry that carried a route, which left an in-page rail with no way
+	 * to report its own clicks at all. Headers, separators and disabled entries still never emit, and
+	 * the item this carries may have no `route`.
+	 */
 	readonly itemClick = output<HubNavItem>();
 
 	/** Emitted when a dropdown opens. */
@@ -436,6 +458,13 @@ export class HubNavComponent implements OnInit, OnDestroy {
 		() => this.resolvedConfig().position === 'sticky' && this.resolvedOrientation() === 'vertical'
 	);
 
+	constructor() {
+		// Bound, not mirrored. Copying the value into the state service inside an effect lands
+		// a change-detection pass behind it, so the first render after the mark moves still
+		// paints the entry it moved off — for a scroll spy, that is every mark it reports.
+		this.state.bindActiveItemId(this.activeItemId);
+	}
+
 	/** @inheritDoc */
 	ngOnInit(): void {
 		this.initialized = true;
@@ -481,14 +510,18 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	 * @param payload - The clicked item and original DOM event.
 	 */
 	onItemClick(payload: { item: HubNavItem; event: Event }): void {
-		if (payload.item.route) {
-			this.itemClick.emit(payload.item);
-			// Keep parent sections open when the clicked item also owns children.
-			// This is required for responsive/mobile accordion behavior and for
-			// route-aware items that intentionally perform both actions.
-			if (!payload.item.children?.length && !this.routeDrivesAnAccordion(payload.item)) {
-				this.state.closeAllDropdowns();
-			}
+		// Every entry the reader can press, route or no route. Gating this on `route` meant
+		// an in-page rail — sections of one document, a wizard step, anything the URL does
+		// not move between — reported nothing at all, and the applications that needed those
+		// clicks went around the component: a listener of their own on the rendered buttons,
+		// matching entries by the text inside them.
+		this.itemClick.emit(payload.item);
+
+		// Keep parent sections open when the clicked item also owns children.
+		// This is required for responsive/mobile accordion behavior and for
+		// route-aware items that intentionally perform both actions.
+		if (!payload.item.children?.length && !this.routeDrivesAnAccordion(payload.item)) {
+			this.state.closeAllDropdowns();
 		}
 	}
 

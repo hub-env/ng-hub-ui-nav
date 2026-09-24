@@ -2,6 +2,45 @@
 
 This document tracks breaking changes in the `ng-hub-ui-nav` library.
 
+## Version 22.16.0
+
+### `itemClick` fires for entries that carry no route (behavioural change)
+
+- **Change**: the output used to be gated on `item.route`, so only routable entries were
+  reported. It now fires for every entry the reader can press — a section anchor, a wizard step,
+  anything whose click the application handles itself. Headers, separators and disabled items are
+  unchanged: they never emitted and still do not.
+- **Impact**: a handler that treated the payload as routable can now receive an item without a
+  route. `this.router.navigate(item.route!)` was safe before and throws now, and a counter or an
+  analytics call keyed on the output will see clicks it never saw. Nothing fails to compile: the
+  payload type has not changed, because `route` was always optional.
+- **Migration**: check before using the route.
+
+    ```ts
+    onItemClick(item: HubNavItem): void {
+        if (!item.route) {
+            return;
+        }
+        // …
+    }
+    ```
+
+### `HubNavScrollSpyDirective.scrollTo` scrolls one container (behavioural change)
+
+- **Change**: the jump used `scrollIntoView`, which moves every scrollable ancestor of the
+  section. It now scrolls exactly one element — `scrollContainer` when you declare it, otherwise
+  the nearest scrolling ancestor, otherwise the window — and subtracts `offset` so the section
+  lands below a sticky header instead of behind it.
+- **Impact**: a page whose section was reachable only by scrolling two nested containers at once
+  now moves the inner one alone. Conversely, a layout that relied on the shell sliding to make
+  room stops sliding. The `offset` compensation also changes where the jump lands, by exactly the
+  value you already set for the observer.
+- **Migration**: usually none. Declare the element you mean if the automatic choice is wrong:
+
+    ```html
+    <div #body class="page__body" hubNavScrollSpy [scrollContainer]="body">…</div>
+    ```
+
 ## Version 22.8.0
 
 ### Items stay active on descendant routes (behavioural change)

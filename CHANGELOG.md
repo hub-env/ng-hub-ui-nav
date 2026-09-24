@@ -2,6 +2,66 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.16.0] - 2026-09-23
+
+### Added
+
+- **An entry can be marked active without a route.** `<hub-nav [activeItemId]="…">` names the
+  entry the reader is on — by its `id` or by its `fragment` — and `HubNavItem.active` states it
+  on the item itself. Until now the mark was the router's to give, so a nav over the sections of
+  a single page, a wizard step or a selection held in a store had no way to show where anybody
+  was. Both consumers were doing it from outside: finding the rendered button by the text inside
+  it and writing the library's own `hub-nav-item__link--active` class onto it.
+
+    `activeItemId` answers for the whole menu while it is set — route matching stands down, so
+    the mark cannot land on two entries at once — and it is two-way, which is how the scroll spy
+    drives it. `active` is per item and is read as written, `false` included, so an item can
+    refuse the mark on its own route.
+
+- **The scroll spy can be bound to a nav.** `[nav]` joins the two halves: the section under the
+  reader marks the matching entry, and a click on an entry scrolls to its section. Neither
+  touches the URL. Marking by replacing the URL is a documentation-site convention rather than a
+  general one, and it costs a router navigation and a history entry for every section the reader
+  scrolls past.
+
+- **The scroll spy takes the container it should scroll.** `[scrollContainer]` names the element
+  these sections move inside, for the common case of an application shell that scrolls its own
+  column — and for a container that only becomes scrollable once its content arrives, which the
+  automatic walk up the tree cannot see.
+
+- **A quiet period after a click.** `[clickSettleMs]` keeps the section a click asked for while
+  the jump is still in flight. A click already held its answer until the reader scrolled under
+  their own steam, but the smooth scroll passes under the pointer and one notch of a wheel handed
+  the question back to the geometry mid-flight, landing the mark somewhere between where they
+  were and where they asked to be. Both consumers had settled on roughly a second.
+
+### Changed
+
+- **BREAKING — `itemClick` now fires for every entry the reader can press, not only the ones
+  with a route.** An in-page rail reported nothing at all, which is why the applications that
+  needed those clicks went around the component. A handler that assumed `item.route` was there
+  now has to check. See `BREAKING_CHANGES.md`.
+- **BREAKING — `scrollTo` scrolls one container instead of asking the browser to bring the
+  section into view.** `scrollIntoView` scrolls every ancestor that can scroll, so a jump inside
+  a column slid the shell under its own header and moved an overflowing wrapper sideways. The
+  jump also compensates `offset` now, which `scrollIntoView` had no way to take. See
+  `BREAKING_CHANGES.md`.
+- Pressing an entry with no route closes the open flyout, as pressing one with a route already
+  did. A dismissable menu that ignored half its own entries was never the intention.
+
+### Fixed
+
+- **`HubNavItem.cssClass` reaches the DOM.** It has been declared on the model, and documented,
+  since the first version, and nothing ever painted it — so the one hook for telling an entry
+  apart from outside silently did nothing.
+- **An entry with no route could not look active.** Only the routable branches of the item
+  template carried the active class; the button drawn for a routeless entry carried none, so
+  even an explicitly marked entry rendered exactly like its neighbours.
+- **`aria-current` says which kind of "here" it means.** A mark the route gave is
+  `aria-current="page"` as before; a mark the host gave is `location`, because the reader is
+  here but the page did not change to say so. The dropdown toggle announces it too, which it
+  never did.
+
 ## [22.15.0] - 2026-09-23
 
 ### Changed

@@ -62,6 +62,8 @@ describe('HubNavScrollSpySectionDirective', () => {
 	beforeAll(() => {
 		vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
 		Element.prototype.scrollIntoView = vi.fn();
+		// With no container declared the jump falls to the window, which jsdom does not implement.
+		vi.stubGlobal('scrollTo', vi.fn());
 	});
 
 	beforeEach(async () => {

@@ -335,6 +335,7 @@ export class HubNavItemListComponent implements OnInit, OnDestroy {
 	private readonly indicatorSync = effect(() => {
 		this.items();
 		this.currentUrl();
+		this.state.activeItemId();
 		this.state.orientation();
 		this.state.railActive();
 		this.state.collapsed();

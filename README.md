@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.15.0` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.16.0` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -150,23 +150,36 @@ export class ExampleComponent {
 ### Scroll Spy
 
 ```html
-<section
-	hubNavScrollSpy
-	(activeSectionChange)="activeSection = $event"
->
+<section hubNavScrollSpy (activeSectionChange)="activeSection = $event">
 	<section id="overview" hubNavScrollSpySection>...</section>
 	<section id="api" hubNavScrollSpySection>...</section>
 </section>
 ```
 
+#### Scroll Spy joined to a nav
+
+Bind the spy to the nav and the two halves work as one: the section under the reader marks the
+matching entry — by `id` or by `fragment` — and a click on an entry scrolls to its section. No
+URL is written and no history entry is left, so an in-page index costs nothing but the scroll.
+
+```html
+<hub-nav #index [items]="sections" [config]="{ orientation: 'vertical' }" />
+
+<div #body class="page__body" hubNavScrollSpy [nav]="index" [scrollContainer]="body" [clickSettleMs]="1000" [offset]="96">
+	<section id="overview" hubNavScrollSpySection>...</section>
+	<section id="api" hubNavScrollSpySection>...</section>
+</div>
+```
+
+`scrollContainer` is the element that actually scrolls — declare it when the automatic walk up
+the tree would find the wrong one, or when the container only becomes scrollable once its
+content arrives. `clickSettleMs` keeps the section a click asked for while the jump is still in
+flight, so a stray wheel notch does not land the mark halfway.
+
 ### Collapsed Icon Rail
 
 ```html
-<hub-nav
-	[items]="items"
-	[(rail)]="rail"
-	[config]="{ orientation: 'vertical', verticalExpandMode: 'accordion' }"
->
+<hub-nav [items]="items" [(rail)]="rail" [config]="{ orientation: 'vertical', verticalExpandMode: 'accordion' }">
 	<!-- The slot context exposes the rail state, e.g. to swap the logo for a mark -->
 	<ng-template hubNavStart let-rail="rail">
 		<span class="brand">{{ rail ? 'A' : 'Acme ERP' }}</span>
@@ -182,26 +195,28 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 
 #### Inputs
 
-| Input | Type | Default | Description |
-|---|---|---|---|
-| `items` | `HubNavItem[]` | required | Navigation tree to render. |
-| `config` | `Partial<HubNavConfig>` | `{}` | Per-instance config merged with global defaults. |
-| `navClass` | `string` | `''` | Additional class applied to the internal `<nav>`. |
-| `itemTemplate` | `TemplateRef<unknown> \| null` | `null` | Optional custom item template. |
-| `autoOpenFromRoute` | `boolean` | `false` | Opens matching dropdowns/panels from the current route, and leaves exactly one section open when roots expand differently: arriving at an accordion root drops the panel of the panel root you left, and the other way round. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
-| `rail` | `boolean` (two-way `model`) | `false` | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`. |
-| `color` | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string \| undefined` | `undefined` (reads as `primary`) | Semantic accent for the hover/active affordances. A bareword — semantic name, registered accent or CSS named colour — resolves through `--hub-sys-color-<name>`; a literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged. |
+| Input               | Type                                                                               | Default                          | Description                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`             | `HubNavItem[]`                                                                     | required                         | Navigation tree to render.                                                                                                                                                                                                                                                                                                                                                               |
+| `config`            | `Partial<HubNavConfig>`                                                            | `{}`                             | Per-instance config merged with global defaults.                                                                                                                                                                                                                                                                                                                                         |
+| `navClass`          | `string`                                                                           | `''`                             | Additional class applied to the internal `<nav>`.                                                                                                                                                                                                                                                                                                                                        |
+| `itemTemplate`      | `TemplateRef<unknown> \| null`                                                     | `null`                           | Optional custom item template.                                                                                                                                                                                                                                                                                                                                                           |
+| `activeItemId`      | `string \| null` (two-way `model`)                                                 | `null`                           | Entry to mark active, by `id` or `fragment`, when the router is not what says where the reader is. While it is set it answers for the whole menu: route matching stands down, so the mark cannot land on two entries at once, and the marked entry announces `aria-current="location"`. Bind with `[(activeItemId)]`.                                                                    |
+| `autoOpenFromRoute` | `boolean`                                                                          | `false`                          | Opens matching dropdowns/panels from the current route, and leaves exactly one section open when roots expand differently: arriving at an accordion root drops the panel of the panel root you left, and the other way round. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
+| `rail`              | `boolean` (two-way `model`)                                                        | `false`                          | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`.                                                                                                                                                                                                                                                                                      |
+| `color`             | `'primary' \| 'success' \| 'danger' \| 'warning' \| 'info' \| string \| undefined` | `undefined` (reads as `primary`) | Semantic accent for the hover/active affordances. A bareword — semantic name, registered accent or CSS named colour — resolves through `--hub-sys-color-<name>`; a literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged.                                                                                                                                           |
 
 #### Outputs
 
-| Output | Type | Description |
-|---|---|---|
-| `itemClick` | `OutputEmitterRef<HubNavItem>` | Emitted when a link item is activated. |
-| `dropdownOpen` | `OutputEmitterRef<HubNavItem>` | Emitted when a dropdown opens. |
-| `dropdownClose` | `OutputEmitterRef<HubNavItem>` | Emitted when a dropdown closes. |
-| `mobileToggle` | `OutputEmitterRef<boolean>` | Emitted when the responsive mobile panel opens or closes. |
-| `panelChange` | `OutputEmitterRef<HubNavPanelEvent>` | Emitted when a panel opens, closes, drills down, or drills back. |
-| `railChange` | `OutputEmitterRef<boolean>` | Emitted when the rail model flips — persist it app-side to restore the rail on boot. |
+| Output               | Type                                 | Description                                                                                                         |
+| -------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `itemClick`          | `OutputEmitterRef<HubNavItem>`       | Emitted when an entry is activated, with or without a route. Headers, separators and disabled items never emit.     |
+| `activeItemIdChange` | `OutputEmitterRef<string \| null>`   | Emitted when the marked entry changes, which is how a bound `hubNavScrollSpy` reports the section under the reader. |
+| `dropdownOpen`       | `OutputEmitterRef<HubNavItem>`       | Emitted when a dropdown opens.                                                                                      |
+| `dropdownClose`      | `OutputEmitterRef<HubNavItem>`       | Emitted when a dropdown closes.                                                                                     |
+| `mobileToggle`       | `OutputEmitterRef<boolean>`          | Emitted when the responsive mobile panel opens or closes.                                                           |
+| `panelChange`        | `OutputEmitterRef<HubNavPanelEvent>` | Emitted when a panel opens, closes, drills down, or drills back.                                                    |
+| `railChange`         | `OutputEmitterRef<boolean>`          | Emitted when the rail model flips — persist it app-side to restore the rail on boot.                                |
 
 ### `HubNavConfig`
 
@@ -235,7 +250,6 @@ interface HubNavConfig {
 
 `labels` overrides the built-in accessible strings (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection` — the last one supports a `{label}` placeholder) per instance. Without an override, each label resolves from the shared `HUBUI.NAV.*` dictionary keys (`provideHubTranslationAdapter()` in `ng-hub-ui-utils`) and finally falls back to English.
 
-
 ### `HubNavItem`
 
 ```typescript
@@ -252,6 +266,7 @@ interface HubNavItem {
 	badge?: string;
 	badgeClass?: string;
 	disabled?: boolean;
+	active?: boolean;
 	cssClass?: string;
 	data?: unknown;
 	expandMode?: 'accordion' | 'flyout' | 'panel';
@@ -272,6 +287,26 @@ marked: at `/products/categories` the catalogue entry is marked and
 `/products` is not, while at `/products/42/edit` the list keeps its mark
 because nothing more specific matches.
 
+#### Marking without a route
+
+Two things outrank the router, in this order. `active` on the item is read as written, `false`
+included, so an entry can refuse the mark on its own route:
+
+```typescript
+{ id: 'overview', label: 'Overview', type: 'link', active: true }
+```
+
+`activeItemId` on the nav names one entry for the whole menu, by `id` or by `fragment`. While it
+is set no route matching runs at all, which is what keeps two entries from lighting up at once;
+set it back to `null` to hand the decision to the URL again.
+
+```html
+<hub-nav [items]="sections" [activeItemId]="currentSection()" />
+```
+
+Either way the marked entry announces itself as `aria-current="location"` rather than `page`:
+the reader is here, but the page did not change to say so.
+
 Set `routerLinkActiveOptions: { exact: true }` on an item that should only be
 marked on its exact route:
 
@@ -284,7 +319,7 @@ marked on its exact route:
 - `hubNavStart`: projects content into the start slot.
 - `hubNavEnd`: projects content into the end slot.
 - `hubNavItemTemplate`: overrides item rendering.
-- `hubNavScrollSpy`: tracks visible sections in a scroll container.
+- `hubNavScrollSpy`: tracks visible sections in a scroll container. Takes `enabled`, `offset`, `sectionSelector`, `nav`, `scrollContainer` and `clickSettleMs`; emits `activeSectionChange` and exposes `scrollTo(sectionId, behavior?)`.
 - `hubNavScrollSpySection`: marks a section as spy-trackable.
 
 ## Styling

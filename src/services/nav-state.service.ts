@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, Signal, signal, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HubTranslationService } from 'ng-hub-ui-utils';
 import { HubNavItem } from '../models/nav-item.model';
@@ -50,6 +50,16 @@ export class HubNavStateService {
 	private _rail = signal(false);
 
 	/**
+	 * Where the host-declared mark is read from.
+	 *
+	 * The host's own signal, held and read live, rather than a value copied into one here:
+	 * a copy made in an effect lands a change-detection pass after the change, so the render
+	 * that follows a moved mark still paints the entry it moved off. For a scroll spy that is
+	 * every mark it ever reports.
+	 */
+	private _activeItemIdSource = signal<Signal<string | null>>(signal(null));
+
+	/**
 	 * Optional bridge to the shared Hub UI dictionary. Absent when the app
 	 * does not register `provideHubTranslationAdapter()`.
 	 */
@@ -81,6 +91,9 @@ export class HubNavStateService {
 
 	/** Readonly rail request signal (the raw host input, before gating). */
 	readonly rail = this._rail.asReadonly();
+
+	/** Readonly host-declared active entry. Null while the route owns the mark. */
+	readonly activeItemId = computed(() => this._activeItemIdSource()());
 
 	/**
 	 * Whether the icon rail is effectively active. The rail is desktop-only
@@ -172,6 +185,17 @@ export class HubNavStateService {
 		}
 		this._rail.set(rail);
 		this.closeAllDropdowns();
+	}
+
+	/**
+	 * Points the mark at the host's own signal, naming the entry to mark by `id` or
+	 * `fragment`. Whatever it carries takes the decision off the router; `null` hands
+	 * it back.
+	 *
+	 * @param source - The nav's `activeItemId` model.
+	 */
+	bindActiveItemId(source: Signal<string | null>): void {
+		this._activeItemIdSource.set(source);
 	}
 
 	/**
@@ -671,6 +695,12 @@ export class HubNavStateService {
 			return false;
 		}
 
+		// Nothing below arbitrates a mark the host stated outright: the tie-break exists to
+		// pick between two items the URL matched, and here the URL was never consulted.
+		if (this.explicitMark(item) === true) {
+			return true;
+		}
+
 		const route = this.routeOf(item);
 
 		if (!route) {
@@ -738,7 +768,13 @@ export class HubNavStateService {
 	 * @returns `true` if the item or a descendant is active.
 	 */
 	isItemOrDescendantActive(item: HubNavItem, activeRoute: string): boolean {
-		if (item.route) {
+		const mark = this.explicitMark(item);
+
+		if (mark === true) {
+			return true;
+		}
+
+		if (mark === null && item.route) {
 			const route = this.routeOf(item)!;
 			const [pathAndQuery, activeFragment] = activeRoute.split('#');
 			const activePath = this.normalizePath(pathAndQuery.split('?')[0]);
@@ -775,5 +811,34 @@ export class HubNavStateService {
 			return item.children.some((child) => this.isItemOrDescendantActive(child, activeRoute));
 		}
 		return false;
+	}
+
+	/**
+	 * Whether something other than the router has already settled this item's mark.
+	 *
+	 * Two sources, in this order. `item.active` is the item's own statement and is read
+	 * as written, `false` included — an item can refuse the mark on its own route.
+	 * `activeItemId`, once the host sets it, answers for the whole menu: it is the
+	 * mechanism for a mark that moves, and letting the route still light entries beside
+	 * it is how a nav ends up claiming the reader is in two places.
+	 *
+	 * An item is named by its `id` or by its `fragment`, so a menu whose entries are
+	 * in-page anchors can be driven by the section ids a scroll spy reports.
+	 *
+	 * @param item - Item being considered.
+	 * @returns The settled answer, or `null` when the route still decides.
+	 */
+	explicitMark(item: HubNavItem): boolean | null {
+		if (typeof item.active === 'boolean') {
+			return item.active;
+		}
+
+		const marked = this.activeItemId();
+
+		if (marked === null) {
+			return null;
+		}
+
+		return marked === item.id || marked === item.fragment;
 	}
 }

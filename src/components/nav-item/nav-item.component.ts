@@ -23,6 +23,7 @@ import { HubNavStateService } from '../../services/nav-state.service';
 		'[class.hub-nav-item--has-children]': 'hasChildren()',
 		'[class.hub-nav-item--expanded]': 'isExpanded()',
 		'[class.hub-nav-item--header]': 'isHeader()',
+		'[class]': 'item().cssClass ?? ""',
 		'[attr.data-item-id]': 'item().id',
 		role: 'none'
 	},
@@ -71,6 +72,22 @@ export class HubNavItemComponent {
 
 	/** Tooltip side: away from the rail, following the configured sidebar side. */
 	readonly railTooltipPlacement = computed(() => (this.state.config().sidebarSide === 'right' ? 'left' : 'right'));
+
+	/**
+	 * Which `aria-current` token the marked entry announces.
+	 *
+	 * `page` is a claim about the document that is open, so it is only true when the
+	 * route is what marked the item. An entry marked by the host — a section of this
+	 * page, a step, a selection — is `location`: the reader is here, but the page did
+	 * not change to say so.
+	 */
+	readonly ariaCurrent = computed<'page' | 'location' | null>(() => {
+		if (!this.isActive()) {
+			return null;
+		}
+
+		return this.state.explicitMark(this.item()) === true ? 'location' : 'page';
+	});
 
 	/** Accessible label for the caret button, resolved through the nav labels. */
 	readonly caretAriaLabel = computed(() => this.state.toggleSectionLabel(this.item().label));

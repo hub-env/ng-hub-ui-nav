@@ -55,6 +55,21 @@ export interface HubNavItem {
 	/** Whether the item is disabled (visually muted, non-interactive). */
 	disabled?: boolean;
 
+	/**
+	 * Marks the item active — or forbids it — whatever the router says.
+	 *
+	 * The route is the right answer while the URL is what moves between sections, and
+	 * the wrong one everywhere else: a rail over the sections of a single page, a wizard
+	 * step, a list whose selection lives in a store. Those navs were being hand-marked
+	 * from outside, by writing the library's own class onto an element found by its text.
+	 *
+	 * `true` marks the item and `false` keeps it unmarked even on its own route; leaving
+	 * it out is what hands the decision back to the URL. For a mark that moves — one
+	 * entry at a time, as a scroll spy reports — use `activeItemId` on `<hub-nav>`
+	 * instead of rewriting the tree on every change.
+	 */
+	active?: boolean;
+
 	/** Additional CSS class applied to the item element. */
 	cssClass?: string;
 

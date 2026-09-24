@@ -13,6 +13,8 @@ import {
 	output,
 	signal
 } from '@angular/core';
+import { HubNavComponent } from '../components/nav/nav.component';
+import { HubNavItem } from '../models/nav-item.model';
 
 /**
  * Scroll spy container directive that tracks the currently visible section and
@@ -32,6 +34,43 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 
 	/** CSS selector used to locate section elements inside the host container. */
 	readonly sectionSelector = input<string>('[data-hub-nav-scroll-spy-section]');
+
+	/**
+	 * The nav this spy answers for. Bound, the two halves join up: the section under the
+	 * reader marks the matching entry — by `id` or by `fragment`, and without writing a
+	 * URL — and a click on an entry scrolls here.
+	 *
+	 * Left unbound the spy only reports through `activeSectionChange`, which is what
+	 * every consumer then had to turn into a mark by hand.
+	 */
+	readonly nav = input<HubNavComponent | null>(null);
+
+	/**
+	 * The element these sections actually scroll in, when it is not the one the spy would
+	 * find by walking up from them — an application shell that scrolls its own column,
+	 * a container that only becomes scrollable once its content arrives.
+	 *
+	 * It is also what `scrollTo` moves. The old implementation asked the browser to bring
+	 * the section into view, and the browser obliges by scrolling every ancestor that can
+	 * scroll: the shell slid under its own header, and a page inside an overflowing
+	 * wrapper travelled sideways.
+	 */
+	readonly scrollContainer = input<HTMLElement | null>(null);
+
+	/**
+	 * How long, in milliseconds, a click's answer survives the reader appearing to
+	 * take over.
+	 *
+	 * A click already pins the section it asked for until the reader scrolls under their
+	 * own steam — but the smooth scroll it starts passes under the pointer, and one
+	 * notch of a wheel or a stray touch hands the question straight back to the geometry
+	 * mid-flight, landing the mark somewhere between where they were and where they
+	 * asked to be. During this window those events are ignored.
+	 *
+	 * `0`, the default, keeps the previous behaviour. Consumers that hit this settled on
+	 * roughly a second.
+	 */
+	readonly clickSettleMs = input<number>(0);
 
 	/** Emits the active section id whenever it changes. */
 	readonly activeSectionChange = output<string>();
@@ -67,6 +106,12 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 	/** Detaches the listeners that tell us the reader has taken over. */
 	private detachIntent?: () => void;
 
+	/** Whether the quiet period after a click is still running. See {@link clickSettleMs}. */
+	private settling = false;
+
+	/** Pending end of that quiet period. */
+	private settleTimer?: ReturnType<typeof setTimeout>;
+
 	/**
 	 * Slack for "the container has nothing left to scroll". Fractional layouts and zoom
 	 * leave the last pixel or two unreachable, and an exact comparison never fires.
@@ -86,8 +131,11 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		const isEnabled = this.enabled();
 		const topOffset = this.offset();
 		const selector = this.sectionSelector();
+		// A new container is a new element to listen on, so the observer is rebuilt for it.
+		const container = this.scrollContainer();
 		void topOffset;
 		void selector;
+		void container;
 
 		if (!isEnabled) {
 			this.destroyObserver();
@@ -95,6 +143,39 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		}
 
 		this.scheduleInit();
+	});
+
+	/**
+	 * Marks the bound nav's entry for the section under the reader.
+	 *
+	 * Through the nav's own `activeItemId` rather than a URL: naming a section by
+	 * replacing the URL is a documentation-site convention, not a general one, and it
+	 * costs a router navigation and a history entry per section the reader passes.
+	 */
+	private readonly navMarkEffect = effect(() => {
+		this.nav()?.activeItemId.set(this.activeId());
+	});
+
+	/**
+	 * Scrolls here when an entry of the bound nav is clicked.
+	 *
+	 * The entry names its section through `fragment` or, failing that, its own `id`.
+	 * An entry that names no tracked section is left alone — a link to another page
+	 * still navigates, and nothing here interferes.
+	 */
+	private readonly navClickEffect = effect((onCleanup) => {
+		const nav = this.nav();
+
+		if (!nav) {
+			return;
+		}
+
+		const subscription = nav.itemClick.subscribe((item: HubNavItem) => this.scrollTo(item.fragment ?? item.id));
+
+		onCleanup(() => {
+			subscription.unsubscribe();
+			nav.activeItemId.set(null);
+		});
 	});
 
 	/** @inheritDoc */
@@ -124,19 +205,67 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		}
 
 		// Their answer, not ours, until they move the page themselves.
-		this.pinnedId = sectionId;
+		this.pin(sectionId);
 
 		if (sectionId !== this.activeId()) {
 			this.activeId.set(sectionId);
 			this.activeSectionChange.emit(sectionId);
 		}
 
-		target.scrollIntoView({
-			behavior,
-			block: 'start',
-			inline: 'nearest'
-		});
+		this.scrollToElement(target, behavior);
 		return true;
+	}
+
+	/**
+	 * Holds a section as the answer, and starts the window in which the reader's own
+	 * gestures do not overturn it.
+	 *
+	 * @param sectionId - Section the reader asked for.
+	 */
+	private pin(sectionId: string): void {
+		this.pinnedId = sectionId;
+		clearTimeout(this.settleTimer);
+
+		const settle = this.clickSettleMs();
+
+		if (settle <= 0) {
+			this.settling = false;
+			return;
+		}
+
+		this.settling = true;
+		this.settleTimer = setTimeout(() => {
+			this.settling = false;
+		}, settle);
+	}
+
+	/**
+	 * Scrolls one container to put a section under the reader, offset included.
+	 *
+	 * Deliberately not `scrollIntoView`: it scrolls every ancestor that can scroll, so
+	 * an application shell moved under its own header to satisfy a jump inside the
+	 * column. Computing the offset here is also what lets the sticky compensation the
+	 * observer already uses apply to the jump, which `scrollIntoView` has no way to take.
+	 *
+	 * @param target - Section element to bring to the top of the container.
+	 * @param behavior - Native scroll behavior.
+	 */
+	private scrollToElement(target: HTMLElement, behavior: ScrollBehavior): void {
+		const scroller = this.resolveScroller();
+		const targetTop = target.getBoundingClientRect().top;
+
+		if (!scroller || scroller === document.scrollingElement) {
+			window.scrollTo({ top: Math.max(0, window.scrollY + targetTop - this.offset()), behavior });
+			return;
+		}
+
+		const top = scroller.scrollTop + targetTop - scroller.getBoundingClientRect().top - this.offset();
+		scroller.scrollTo({ top: Math.max(0, top), behavior });
+	}
+
+	/** The container this spy reads and moves: the declared one, or the one it can find. */
+	private resolveScroller(): HTMLElement | null {
+		return this.scrollContainer() ?? this.scrollParent();
 	}
 
 	private scheduleInit(): void {
@@ -181,6 +310,8 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 		this.detachIntent?.();
 		this.detachIntent = undefined;
 		this.pinnedId = null;
+		clearTimeout(this.settleTimer);
+		this.settling = false;
 	}
 
 	/**
@@ -188,7 +319,7 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 	 * the sections below the band stop moving, so nothing changes and nothing fires.
 	 */
 	private observeScrollEnd(): void {
-		const scroller = this.scrollParent();
+		const scroller = this.resolveScroller();
 		const target: EventTarget = scroller === document.scrollingElement ? window : (scroller ?? window);
 		let queued = false;
 
@@ -218,6 +349,9 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 	 */
 	private observeReaderIntent(): void {
 		const release = () => {
+			if (this.settling) {
+				return;
+			}
 			this.pinnedId = null;
 		};
 		const events: Array<keyof WindowEventMap> = ['wheel', 'touchmove', 'keydown'];
@@ -295,7 +429,7 @@ export class HubNavScrollSpyDirective implements AfterViewInit, OnDestroy {
 
 	/** Whether the surface these sections scroll in has nothing left to give. */
 	private isScrolledToEnd(): boolean {
-		const scroller = this.scrollParent();
+		const scroller = this.resolveScroller();
 
 		if (!scroller) {
 			return false;
