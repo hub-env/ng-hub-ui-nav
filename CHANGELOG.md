@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.17.1] - 2026-09-28
+
+### Changed
+
+- **The family list in both READMEs names `ng-hub-ui-spreadsheet`.** The sheet joined the family
+  and the other lists had not caught up. Documentation only: no code, types or styles change.
+
 ## [22.17.0] - 2026-09-24
 
 ### Added
