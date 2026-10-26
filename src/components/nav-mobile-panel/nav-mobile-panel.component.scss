@@ -13,7 +13,7 @@
 	display: flex;
 	flex-direction: column;
 	background-color: var(--hub-nav-mobile-bg, var(--hub-sys-surface-elevated, #f8f9fa));
-	color: var(--hub-nav-mobile-color, var(--hub-sys-text-primary, #212529));
+	color: var(--hub-nav-mobile-color, var(--hub-sys-text-body, var(--hub-sys-text-primary, #212529)));
 	// The token is a complete `transition` value (ds shape: `all 0.2s ease-in-out`);
 	// composing it after a property name would make the declaration invalid.
 	transition: var(--hub-nav-mobile-transition, all 0.2s ease-in-out);

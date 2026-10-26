@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.17.2] - 2026-10-26
+
+### Changed
+
+- **Ordinary text reads the new ink names.** Every default that painted text with
+  `--hub-sys-text-primary`, `-secondary` or `-tertiary` now reads `--hub-sys-text-body`,
+  `-body-secondary` or `-body-tertiary`, the names `ng-hub-ui-ds` 22.14 gave the ink so that the old
+  ones can go to the `primary` and `secondary` accents in its next major. The colours do not change:
+  today the new names follow the old ones. One case does change: a product that sets
+  `--hub-sys-text-primary` on a section of its own, without `data-theme`, no longer recolours this
+  text there; it has to set `--hub-sys-text-body` instead. `ng-hub-ui-nav` does not depend on
+  `ng-hub-ui-ds`, so each default reads the new name, then the old one, then the literal colour, and
+  keeps working with a ds older than 22.14.
+
 ## [22.17.1] - 2026-09-28
 
 ### Changed
