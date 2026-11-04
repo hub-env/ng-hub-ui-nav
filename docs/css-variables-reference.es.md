@@ -85,7 +85,7 @@ El único punto `--hub-nav-accent` (re-basado según el input `variant`) control
 | `--hub-nav-item-active-font-weight`     | `var(--hub-ref-font-weight-semibold, 600)`                                         |
 | `--hub-nav-item-active-indicator-color` | `var(--hub-nav-accent)`                                                            |
 | `--hub-nav-item-active-indicator-size`  | `3px`                                                                              |
-| `--hub-nav-item-disabled-color`         | `var(--hub-sys-text-muted, #6c757d)`                                               |
+| `--hub-nav-item-disabled-color`         | `var(--hub-sys-text-muted, #6a737b)`                                               |
 | `--hub-nav-item-disabled-opacity`       | `var(--hub-sys-opacity-disabled, 0.65)`                                            |
 
 La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo se renderiza en navegaciones horizontales; las navegaciones verticales/sidebar se señalan únicamente con el tinte + el texto de acento.
@@ -111,7 +111,7 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | -------------------------------------------------- | ---------------------------------------------- |
 | `--hub-nav-header-font-size`                       | `var(--hub-ref-font-size-sm, 0.875rem)`        |
 | `--hub-nav-header-font-weight`                     | `var(--hub-ref-font-weight-semibold, 600)`     |
-| `--hub-nav-header-color`                           | `var(--hub-sys-text-muted, #6c757d)`           |
+| `--hub-nav-header-color`                           | `var(--hub-sys-text-muted, #6a737b)`           |
 | `--hub-nav-header-padding-x`                       | `var(--hub-ref-space-3, 1rem)`                 |
 | `--hub-nav-header-padding-y`                       | `var(--hub-ref-space-1, 0.25rem)`              |
 | `--hub-nav-header-margin-top`                      | `var(--hub-ref-space-3, 1rem)`                 |

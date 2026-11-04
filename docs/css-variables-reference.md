@@ -85,7 +85,7 @@ The single `--hub-nav-accent` hook (re-based per the `color` input) drives the h
 | `--hub-nav-item-active-font-weight`     | `var(--hub-ref-font-weight-semibold, 600)`                                         |
 | `--hub-nav-item-active-indicator-color` | `var(--hub-nav-accent)`                                                            |
 | `--hub-nav-item-active-indicator-size`  | `3px`                                                                              |
-| `--hub-nav-item-disabled-color`         | `var(--hub-sys-text-muted, #6c757d)`                                               |
+| `--hub-nav-item-disabled-color`         | `var(--hub-sys-text-muted, #6a737b)`                                               |
 | `--hub-nav-item-disabled-opacity`       | `var(--hub-sys-opacity-disabled, 0.65)`                                            |
 
 The active indicator bar (`--hub-nav-item-active-indicator-*`) renders only on horizontal navbars; vertical/sidebar navs are signalled by the tint + accent text alone.
@@ -111,7 +111,7 @@ The active indicator bar (`--hub-nav-item-active-indicator-*`) renders only on h
 | -------------------------------------------------- | ---------------------------------------------- |
 | `--hub-nav-header-font-size`                       | `var(--hub-ref-font-size-sm, 0.875rem)`        |
 | `--hub-nav-header-font-weight`                     | `var(--hub-ref-font-weight-semibold, 600)`     |
-| `--hub-nav-header-color`                           | `var(--hub-sys-text-muted, #6c757d)`           |
+| `--hub-nav-header-color`                           | `var(--hub-sys-text-muted, #6a737b)`           |
 | `--hub-nav-header-padding-x`                       | `var(--hub-ref-space-3, 1rem)`                 |
 | `--hub-nav-header-padding-y`                       | `var(--hub-ref-space-1, 0.25rem)`              |
 | `--hub-nav-header-margin-top`                      | `var(--hub-ref-space-3, 1rem)`                 |

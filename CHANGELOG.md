@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.17.3] - 2026-11-04
+
+### Fixed
+
+- **The muted-text fallback is the accessible grey.** Where this library writes
+  `var(--hub-sys-text-muted, …)`, the value after the comma was still `#6c757d`, the grey
+  `ng-hub-ui-ds` replaced with `#6a737b` because it reads 4.44:1 on the elevated surface, under the
+  4.5:1 that body text needs. That fallback is what paints when the design system is not loaded, and
+  a product has no way to correct it from outside, so it now carries the new grey as well. With the
+  design system loaded, nothing changes.
+
 ## [22.17.2] - 2026-10-26
 
 ### Changed
