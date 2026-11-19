@@ -193,6 +193,29 @@
 	--hub-nav-rail-toggle-zindex: calc(var(--hub-nav-panel-zindex, 1000) + 1);
 	--hub-nav-rail-toggle-transition: var(--hub-sys-transition-fast, all 0.15s ease-in-out);
 
+	// ── Out-of-view pill (config.outOfViewHint) ──
+	// Same surface as the rail toggle by default, so both floating controls read as one family.
+	--hub-nav-active-hint-color: var(--hub-nav-rail-toggle-color, #212529);
+	--hub-nav-active-hint-hover-color: var(--hub-nav-item-hover-color, #0d6efd);
+	--hub-nav-active-hint-bg: var(--hub-nav-rail-toggle-bg, #fff);
+	--hub-nav-active-hint-border-color: var(--hub-nav-rail-toggle-border-color, #dee2e6);
+	--hub-nav-active-hint-shadow: var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+	--hub-nav-active-hint-font-size: 0.8125rem;
+	--hub-nav-active-hint-padding: 0.25rem 0.625rem;
+	// Space between the arrow, the glyph and the name.
+	--hub-nav-active-hint-gap: 0.375rem;
+	--hub-nav-active-hint-border-width: var(--hub-nav-rail-toggle-border-width, 1px);
+	--hub-nav-active-hint-border-radius: var(--hub-nav-rail-toggle-border-radius, 50rem);
+	// Arrow glyph: an SVG mask pointing to the inline start, replaceable with any url(...) image.
+	--hub-nav-active-hint-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+	--hub-nav-active-hint-icon-size: 0.75em;
+	// Longer names end in an ellipsis rather than covering the list.
+	--hub-nav-active-hint-max-width: min(100%, 14rem);
+	// Gap between the pill and the edge of the list it is docked to.
+	--hub-nav-active-hint-inset: 0.5rem;
+	--hub-nav-active-hint-zindex: 2;
+	--hub-nav-active-hint-transition: var(--hub-sys-transition-fast, all 0.15s ease-in-out);
+
 	// ── Panel mode (stacked side panels) ──
 	--hub-nav-panel-width: 16rem;
 	--hub-nav-panel-bg: var(--hub-sys-surface-elevated, #f8f9fa);

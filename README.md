@@ -8,7 +8,7 @@
 A flexible, accessible, and highly customizable navigation component for Angular 21+. It supports horizontal menus, vertical sidebars, mobile collapse modes, stacked drill-down panels, projected start/end slots, and scroll-spy integration.
 
 > [!IMPORTANT]
-> Version `22.17.3` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
+> Version `22.18.0` targets Angular 22 and follows the signal-first architecture used across `ng-hub-ui`.
 
 ## Documentation and Live Examples
 
@@ -202,7 +202,7 @@ A toggle button ships on the outer edge of the primary column: an arrow inside a
 | `config`            | `Partial<HubNavConfig>`                                                            | `{}`                             | Per-instance config merged with global defaults.                                                                                                                                                                                                                                                                                                                                         |
 | `navClass`          | `string`                                                                           | `''`                             | Additional class applied to the internal `<nav>`.                                                                                                                                                                                                                                                                                                                                        |
 | `itemTemplate`      | `TemplateRef<unknown> \| null`                                                     | `null`                           | Optional custom item template.                                                                                                                                                                                                                                                                                                                                                           |
-| `iconTemplate`      | `TemplateRef<HubNavItemIconContext> \| null`                                       | `null`                           | Glyph drawn in place of the icon class, for entries that declare an `icon`. The `hubNavItemIcon` directive is the usual way in; this input is for a host that already holds the template.                                                                                                                                                                                                 |
+| `iconTemplate`      | `TemplateRef<HubNavItemIconContext> \| null`                                       | `null`                           | Glyph drawn in place of the icon class, for entries that declare an `icon`. The `hubNavItemIcon` directive is the usual way in; this input is for a host that already holds the template.                                                                                                                                                                                                |
 | `activeItemId`      | `string \| null` (two-way `model`)                                                 | `null`                           | Entry to mark active, by `id` or `fragment`, when the router is not what says where the reader is. While it is set it answers for the whole menu: route matching stands down, so the mark cannot land on two entries at once, and the marked entry announces `aria-current="location"`. Bind with `[(activeItemId)]`.                                                                    |
 | `autoOpenFromRoute` | `boolean`                                                                          | `false`                          | Opens matching dropdowns/panels from the current route, and leaves exactly one section open when roots expand differently: arriving at an accordion root drops the panel of the panel root you left, and the other way round. It also re-derives the stack when the viewport comes back above `collapseBreakpoint`; with the input off, a stack opened by hand survives that round trip. |
 | `rail`              | `boolean` (two-way `model`)                                                        | `false`                          | Desktop-only icon rail for vertical navs. Ignored below `collapseBreakpoint`. Bind with `[(rail)]`.                                                                                                                                                                                                                                                                                      |
@@ -240,6 +240,7 @@ interface HubNavConfig {
 	railToggle?: boolean;
 	activeIndicator?: boolean;
 	followReplacedUrls?: boolean | number;
+	outOfViewHint?: HubNavOutOfViewHint; // 'off' | 'hover' | 'always'
 	labels?: Partial<HubNavLabels>;
 }
 ```
@@ -250,7 +251,9 @@ interface HubNavConfig {
 
 `followReplacedUrls` (default `true`) decides how eagerly the nav follows a URL that was **replaced** rather than pushed — which is what a scroll spy does while the reader scrolls. `true` follows every report; a **number** follows only once the reports have been quiet for that many milliseconds, so the mark lands where the reader stopped instead of walking down the menu; `false` never follows, marking only where the reader chose to go. Deep links are unaffected either way.
 
-`labels` overrides the built-in accessible strings (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection` — the last one supports a `{label}` placeholder) per instance. Without an override, each label resolves from the shared `HUBUI.NAV.*` dictionary keys (`provideHubTranslationAdapter()` in `ng-hub-ui-utils`) and finally falls back to English.
+`outOfViewHint` (default `'off'`) docks a pill on the edge of the root list while the active entry is scrolled out of view, with the entry's icon, its name and an arrow pointing to it. Clicking it scrolls the list back to the entry and moves focus there. `'always'` shows it whenever the entry is out of view; `'hover'` only while the pointer or focus is inside the nav. It works on the vertical and horizontal desktop nav and in the rail, where it shows the glyph alone; submenus and the mobile panel are not tracked. Style it with the `--hub-nav-active-hint-*` tokens.
+
+`labels` overrides the built-in accessible strings (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection`, `scrollToActive` — the last two support a `{label}` placeholder) per instance. Without an override, each label resolves from the shared `HUBUI.NAV.*` dictionary keys (`provideHubTranslationAdapter()` in `ng-hub-ui-utils`) and finally falls back to English.
 
 ### `HubNavItem`
 
@@ -372,6 +375,13 @@ The default active item is now a soft accent tint + accent text. To restore the 
 	--hub-nav-bg: #ffffff;
 }
 ```
+
+### Glass
+
+Under the glass layer of `ng-hub-ui-ds` (`[data-hub-glass]` on an ancestor, or `data-theme="glass"`),
+the bar turns translucent, with the sheen and the light rim, and a panel opened inside it lets the
+bar's tint show through. Neither blurs, because the bar sits in the page flow. Without the layer the
+nav paints exactly as before.
 
 ## Changelog
 

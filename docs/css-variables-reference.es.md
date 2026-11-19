@@ -187,6 +187,27 @@ La barra indicadora del item activo (`--hub-nav-item-active-indicator-*`) solo s
 | `--hub-nav-rail-toggle-zindex`        | `calc(var(--hub-nav-panel-zindex, 1000) + 1)`                       |
 | `--hub-nav-rail-toggle-transition`    | `var(--hub-sys-transition-fast, all 0.15s ease-in-out)`             |
 
+### Píldora fuera de vista (`config.outOfViewHint`)
+
+| Variable                              | Default                                                             |
+| ------------------------------------- | ------------------------------------------------------------------- |
+| `--hub-nav-active-hint-color`         | `var(--hub-nav-rail-toggle-color, #212529)`                         |
+| `--hub-nav-active-hint-hover-color`   | `var(--hub-nav-item-hover-color, #0d6efd)`                          |
+| `--hub-nav-active-hint-bg`            | `var(--hub-nav-rail-toggle-bg, #fff)`                               |
+| `--hub-nav-active-hint-border-color`  | `var(--hub-nav-rail-toggle-border-color, #dee2e6)`                  |
+| `--hub-nav-active-hint-shadow`        | `var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075))` |
+| `--hub-nav-active-hint-font-size`     | `0.8125rem`                                                         |
+| `--hub-nav-active-hint-padding`       | `0.25rem 0.625rem`                                                  |
+| `--hub-nav-active-hint-gap`           | `0.375rem`                                                          |
+| `--hub-nav-active-hint-border-width`  | `var(--hub-nav-rail-toggle-border-width, 1px)`                      |
+| `--hub-nav-active-hint-border-radius` | `var(--hub-nav-rail-toggle-border-radius, 50rem)`                   |
+| `--hub-nav-active-hint-icon`          | chevron SVG (`url(...)` mask, replaceable)                          |
+| `--hub-nav-active-hint-icon-size`     | `0.75em`                                                            |
+| `--hub-nav-active-hint-max-width`     | `min(100%, 14rem)`                                                  |
+| `--hub-nav-active-hint-inset`         | `0.5rem`                                                            |
+| `--hub-nav-active-hint-zindex`        | `2`                                                                 |
+| `--hub-nav-active-hint-transition`    | `var(--hub-sys-transition-fast, all 0.15s ease-in-out)`             |
+
 ## Accordion y Panel Mode
 
 | Variable                              | Default                                                             |

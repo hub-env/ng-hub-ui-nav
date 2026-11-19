@@ -162,12 +162,31 @@ export interface HubNavConfig {
 	followReplacedUrls?: boolean | number;
 
 	/**
+	 * Docks a pill on the edge of the root list while the active item is scrolled out of
+	 * view, with the item's icon and name and an arrow pointing to it. Activating it
+	 * scrolls the list back to the item.
+	 *
+	 * - `'off'` — no pill.
+	 * - `'hover'` — the pill appears only while the pointer or focus is inside the nav.
+	 * - `'always'` — the pill appears whenever the active item is out of view.
+	 *
+	 * Covers the root list of the desktop nav, vertical and horizontal, including the
+	 * rail, where the pill shows the glyph alone. Submenus and the mobile panel are not
+	 * tracked.
+	 * @default 'off'
+	 */
+	outOfViewHint?: HubNavOutOfViewHint;
+
+	/**
 	 * Per-instance overrides for the nav's built-in accessible labels.
 	 * Labels omitted here resolve from the shared `HUBUI.NAV.*` dictionary
 	 * keys and finally from the English defaults.
 	 */
 	labels?: Partial<HubNavLabels>;
 }
+
+/** When the out-of-view pill of the active item is shown. */
+export type HubNavOutOfViewHint = 'off' | 'hover' | 'always';
 
 /** Orientation of the navigation layout. */
 export type HubNavOrientation = 'horizontal' | 'vertical';

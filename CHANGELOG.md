@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.18.0] - 2026-11-19
+
+### Added
+
+- **A pill points back to the active entry once it scrolls out of the list.** In a long sidebar
+  the active entry can end up above or below what the reader sees, and nothing on screen says
+  where it went. With `config.outOfViewHint` set, a pill docks on the edge of the root list the
+  entry left through, with its icon, its name and an arrow. Clicking it scrolls the list, and only
+  the list, until the entry is centred, then moves focus onto it. `'always'` shows the pill
+  whenever the entry is out of view; `'hover'` shows it only while the pointer or focus is inside
+  the nav; `'off'`, the default, leaves the nav as it was. It covers the vertical and horizontal
+  desktop nav, and in the rail it shows the glyph alone. Inside a collapsed section it points at
+  the section's row and still names the entry. Submenus and the mobile panel are not tracked.
+  Long names end in an ellipsis, capped by `--hub-nav-active-hint-max-width`. Sixteen new
+  `--hub-nav-active-hint-*` tokens style it, from colours and shadow to padding, radius and the
+  arrow glyph itself, and its accessible name comes from the new
+  `scrollToActive` label (`HUBUI.NAV.SCROLL_TO_ACTIVE`, `'Scroll to {label}'` in English).
+- **The nav follows the glass layer of `ng-hub-ui-ds`.** Under an ancestor with
+  `[data-hub-glass]` or `data-theme="glass"` the bar turns translucent, with the sheen and the light
+  rim, and a panel opened inside it lets the bar's tint show through instead of adding its own.
+  Neither blurs: the bar sits in the page flow, where a blur has nothing behind it but the page
+  backdrop. Without the layer the nav paints exactly as before.
+
 ## [22.17.3] - 2026-11-04
 
 ### Fixed

@@ -14,7 +14,8 @@ import {
 	ElementRef,
 	NgZone,
 	TemplateRef,
-	untracked
+	untracked,
+	viewChild
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
@@ -35,6 +36,7 @@ import { HubNavTogglerComponent } from '../nav-toggler/nav-toggler.component';
 import { HubNavMobilePanelComponent } from '../nav-mobile-panel/nav-mobile-panel.component';
 import { HubNavPanelContainerComponent } from '../nav-panel-container/nav-panel-container.component';
 import { HubNavRailToggleComponent } from '../nav-rail-toggle/nav-rail-toggle.component';
+import { HubNavActiveHintComponent } from '../nav-active-hint/nav-active-hint.component';
 
 let hubNavOverlayOwnerCounter = 0;
 
@@ -57,7 +59,8 @@ let hubNavOverlayOwnerCounter = 0;
 		HubNavTogglerComponent,
 		HubNavMobilePanelComponent,
 		HubNavPanelContainerComponent,
-		HubNavRailToggleComponent
+		HubNavRailToggleComponent,
+		HubNavActiveHintComponent
 	],
 	providers: [HubNavStateService],
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -237,8 +240,17 @@ export class HubNavComponent implements OnInit, OnDestroy {
 	/** Angular router for URL-based panel initialization. */
 	private readonly router = inject(Router);
 
+	/** Element scrolling the desktop root items; the out-of-view pill watches it. */
+	private readonly rootScroll = viewChild('rootScroll', { read: ElementRef });
+
+	/** Root scroll element handed to the out-of-view pill. */
+	readonly rootScrollElement = computed<HTMLElement | null>(() => this.rootScroll()?.nativeElement ?? null);
+
+	/** When the out-of-view pill of the active item is shown. */
+	readonly outOfViewHint = computed(() => this.resolvedConfig().outOfViewHint ?? 'off');
+
 	/** Reactive router URL used to synchronize route-driven nav state. */
-	private readonly currentUrl = signal(this.router.url);
+	protected readonly currentUrl = signal(this.router.url);
 
 	/** Marks when route-driven synchronization can start reacting to inputs. */
 	private readonly routeSyncReady = signal(false);

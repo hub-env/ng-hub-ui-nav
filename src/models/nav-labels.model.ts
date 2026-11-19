@@ -28,6 +28,12 @@ export interface HubNavLabels {
 	 * replaced with the item's own label at render time.
 	 */
 	toggleSection: string;
+
+	/**
+	 * Accessible label of the pill that points to an active item scrolled out of view.
+	 * The `{label}` placeholder is replaced with the active item's label.
+	 */
+	scrollToActive: string;
 }
 
 /** English fallbacks applied when neither config nor dictionary provide a label. */
@@ -38,7 +44,8 @@ export const HUB_NAV_DEFAULT_LABELS: HubNavLabels = {
 	expandNavigation: 'Expand navigation',
 	goBack: 'Go back',
 	closePanel: 'Close panel',
-	toggleSection: 'Toggle {label}'
+	toggleSection: 'Toggle {label}',
+	scrollToActive: 'Scroll to {label}'
 };
 
 /** Shared-dictionary key for each label, under the reserved `HUBUI` namespace. */
@@ -49,5 +56,6 @@ export const HUB_NAV_LABEL_KEYS: Record<keyof HubNavLabels, string> = {
 	expandNavigation: 'HUBUI.NAV.EXPAND_NAVIGATION',
 	goBack: 'HUBUI.NAV.GO_BACK',
 	closePanel: 'HUBUI.NAV.CLOSE_PANEL',
-	toggleSection: 'HUBUI.NAV.TOGGLE_SECTION'
+	toggleSection: 'HUBUI.NAV.TOGGLE_SECTION',
+	scrollToActive: 'HUBUI.NAV.SCROLL_TO_ACTIVE'
 };

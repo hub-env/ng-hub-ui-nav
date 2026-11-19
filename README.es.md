@@ -8,7 +8,7 @@
 Componente de navegación flexible, accesible y altamente personalizable para Angular 21+. Soporta menús horizontales, sidebars verticales, modos responsive para móvil, paneles apilados con drill-down, slots `start` y `end`, y soporte de scroll-spy.
 
 > [!IMPORTANT]
-> La versión `22.17.3` está orientada a Angular 22 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
+> La versión `22.18.0` está orientada a Angular 22 y sigue la arquitectura basada en signals del ecosistema `ng-hub-ui`.
 
 ## Documentación y ejemplos en vivo
 
@@ -240,6 +240,7 @@ interface HubNavConfig {
 	railToggle?: boolean;
 	activeIndicator?: boolean;
 	followReplacedUrls?: boolean | number;
+	outOfViewHint?: HubNavOutOfViewHint; // 'off' | 'hover' | 'always'
 	labels?: Partial<HubNavLabels>;
 }
 ```
@@ -250,7 +251,9 @@ interface HubNavConfig {
 
 `followReplacedUrls` (por defecto `true`) decide con cuánta avidez sigue la navegación una URL **reemplazada** en vez de apilada — que es lo que hace un scroll spy mientras la persona lee. `true` sigue cada aviso; un **número** sigue solo cuando los avisos llevan esos milisegundos en silencio, así la marca aterriza donde la lectura se detuvo en lugar de bajar por el menú; `false` no sigue nunca y marca solo donde se ha elegido ir. Los enlaces profundos no se ven afectados en ningún caso.
 
-`labels` sobrescribe por instancia las cadenas accesibles integradas (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection` — esta última admite el marcador `{label}`). Sin sobrescritura, cada etiqueta se resuelve desde las claves compartidas `HUBUI.NAV.*` (`provideHubTranslationAdapter()` de `ng-hub-ui-utils`) y finalmente cae al inglés.
+`outOfViewHint` (por defecto `'off'`) muestra una píldora en el borde de la lista raíz mientras el elemento activo queda fuera de la vista, con su icono, su nombre y una flecha que apunta hacia él. Al pulsarla, la lista se desplaza hasta el elemento y le pasa el foco. Con `'always'` aparece siempre que el elemento esté fuera de la vista; con `'hover'`, solo mientras el puntero o el foco están dentro de la navegación. Funciona en la navegación de escritorio vertical y horizontal y en el rail, donde muestra solo el icono; los submenús y el panel móvil no se vigilan. Se estiliza con los tokens `--hub-nav-active-hint-*`.
+
+`labels` sobrescribe por instancia las cadenas accesibles integradas (`toggleNavigation`, `closeNavigation`, `collapseNavigation`, `expandNavigation`, `goBack`, `closePanel`, `toggleSection`, `scrollToActive` — las dos últimas admiten el marcador `{label}`). Sin sobrescritura, cada etiqueta se resuelve desde las claves compartidas `HUBUI.NAV.*` (`provideHubTranslationAdapter()` de `ng-hub-ui-utils`) y finalmente cae al inglés.
 
 ### `HubNavItem`
 
@@ -374,6 +377,13 @@ El item activo por defecto ahora es un tinte suave de acento + texto de acento. 
 	--hub-nav-bg: #ffffff;
 }
 ```
+
+### Cristal
+
+Con la capa de cristal de `ng-hub-ui-ds` (`[data-hub-glass]` en un ancestro, o `data-theme="glass"`),
+la barra se vuelve translúcida, con el brillo y el filo de luz, y un panel abierto dentro de ella deja
+ver el tinte de la barra. Ninguno de los dos desenfoca, porque la barra forma parte del flujo de la
+página. Sin la capa, el menú se pinta exactamente igual que antes.
 
 ## Changelog
 

@@ -6,7 +6,10 @@
 	flex-shrink: 0;
 	position: relative;
 	z-index: var(--hub-nav-panel-zindex, 1000);
-	background: var(--hub-nav-panel-bg);
+	// Inside a glass nav (ng-hub-ui-ds glass layer) the panel sits beside the items on the nav's own
+	// tint, so it adds none (two tints stack into an almost opaque white) and no blur either (inside
+	// the nav it could only blur the nav's own fill, which flattens it to white).
+	background-color: color-mix(in srgb, var(--hub-nav-panel-bg) var(--hub-sys-glass-inner-opacity, 100%), transparent);
 	color: var(--hub-nav-panel-color);
 	border-inline-start: var(--hub-nav-panel-border-width) solid var(--hub-nav-panel-border-color);
 	box-shadow: var(--hub-nav-panel-shadow);
@@ -40,7 +43,7 @@
 	height: var(--hub-nav-panel-header-height);
 	min-height: var(--hub-nav-panel-header-height);
 	padding: 0 var(--hub-nav-panel-header-padding-x);
-	background: var(--hub-nav-panel-header-bg);
+	background-color: color-mix(in srgb, var(--hub-nav-panel-header-bg) var(--hub-sys-glass-inner-opacity, 100%), transparent);
 	border-bottom: var(--hub-nav-panel-border-width, 1px) solid var(--hub-nav-panel-header-border-color);
 	font-size: var(--hub-nav-panel-header-font-size);
 	font-weight: var(--hub-nav-panel-header-font-weight);

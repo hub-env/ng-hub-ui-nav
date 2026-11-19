@@ -20,7 +20,8 @@ const DEFAULT_NAV_CONFIG: HubNavConfig = {
 	dropdownRenderMode: 'inline',
 	railToggle: true,
 	activeIndicator: false,
-	followReplacedUrls: true
+	followReplacedUrls: true,
+	outOfViewHint: 'off'
 };
 
 /**

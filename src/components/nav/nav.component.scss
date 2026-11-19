@@ -6,20 +6,22 @@
 
 nav {
 	display: flex;
-	background-color: var(--hub-nav-bg, #fff);
+	// Glass when an ancestor turns the layer on (ng-hub-ui-ds); opaque otherwise. No backdrop blur:
+	// the bar sits in the page flow with nothing but the page backdrop behind it.
+	background-color: color-mix(in srgb, var(--hub-nav-bg, #fff) var(--hub-sys-glass-opacity, 100%), transparent);
 	// Kept on its own property rather than folding it into `background`. A gradient is
 	// an <image>, so a var() holding one substituted into background-color computes to
 	// an invalid value and the declaration drops to unset — the bar loses its fill
 	// entirely instead of falling back. With the image on a second property, the colour
 	// underneath stays as the fallback when the image fails or is never set.
-	background-image: var(--hub-nav-bg-image, none);
+	background-image: var(--hub-sys-glass-sheen, none), var(--hub-nav-bg-image, none);
 	color: var(--hub-nav-color, #212529);
 	border: var(--hub-nav-border-width, 1px) var(--hub-nav-border-style, solid) var(--hub-nav-border-color, #dee2e6);
 	// Container radius + elevation. Default to 0 / none so existing bars are
 	// unchanged; a consumer can turn the whole nav into a floating card
 	// (e.g. a sidebar rail) by setting these two tokens.
 	border-radius: var(--hub-nav-border-radius, 0);
-	box-shadow: var(--hub-nav-box-shadow, none);
+	box-shadow: var(--hub-sys-glass-rim, 0 0 #0000), var(--hub-nav-box-shadow, 0 0 #0000);
 	font-family: inherit;
 }
 
@@ -191,6 +193,8 @@ nav {
 	display: flex;
 	align-items: center;
 	gap: var(--hub-nav-gap, 0.25rem);
+	// Anchor for the out-of-view pill, placed over the root scroll by offsets.
+	position: relative;
 }
 
 :host(.hub-nav--horizontal) .hub-nav__horizontal-root-list {
@@ -395,4 +399,18 @@ nav {
 	left: 0;
 	right: 0;
 	z-index: var(--hub-sys-zindex-fixed, 1030);
+}
+
+// ── Out-of-view pill, hover mode ──
+// Hidden until the pointer or focus is inside the row that holds the root list. Focus
+// counts so a keyboard user tabbing into the nav meets the pill instead of skipping it.
+hub-nav-active-hint.hub-nav-active-hint--hover {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.hub-nav__primary-column:is(:hover, :focus-within) > hub-nav-active-hint,
+.hub-nav__horizontal-top-row:is(:hover, :focus-within) > hub-nav-active-hint {
+	opacity: 1;
+	visibility: visible;
 }

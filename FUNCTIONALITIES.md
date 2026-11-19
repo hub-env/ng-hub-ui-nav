@@ -53,6 +53,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 |                       | Active on the item's own route and on anything below it                   |       ✅        |
 |                       | Strict matching (`routerLinkActiveOptions: { exact: true }`)              |       ✅        |
 |                       | Travelling active mark (`activeIndicator`)                                |       ✅        |
+|                       | Out-of-view pill pointing to the active entry (`outOfViewHint`)           |       ✅        |
 |                       | Following replaced URLs (`followReplacedUrls`, boolean or debounce in ms) |       ✅        |
 |                       | Opening dropdowns and panels from the route (`autoOpenFromRoute`)         |       ❌        |
 |                       | One open section at a time when roots expand differently                  |       ❌        |
@@ -118,6 +119,7 @@ The public surface is one root component, `hub-nav`, the child components it ren
 |            | Rail and rail toggle (`--hub-nav-rail-*`)                                                    |       ✅        |
 |            | Mobile drawer (`--hub-nav-mobile-*`)                                                         |       ✅        |
 | **SCSS**   | `hub-nav-theme(...)` mixin, from `ng-hub-ui-nav/styles`                                      |       ✅        |
+| **Glass**  | Translucent bar and panels under the `ng-hub-ui-ds` glass layer, without blur                |       ❌        |
 
 ## Legend
 
