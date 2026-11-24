@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [22.19.0] - 2026-11-24
+
+### Changed
+
+- **The full name of a clipped entry waits 1.5 seconds.** The tooltip that spells out a truncated label appeared the moment the pointer touched it, so moving down the list flashed one after another. It now waits a second and a half, and keyboard focus still shows it at once. The `ng-hub-ui-utils` peer floor rises to 22.24.0, the first version with the delay.
+
 ## [22.18.0] - 2026-11-19
 
 ### Added

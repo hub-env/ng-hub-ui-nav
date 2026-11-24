@@ -22,7 +22,9 @@
 		(click)="onItemClick($event)"
 	>
 		<ng-container [ngTemplateOutlet]="glyph" />
-		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
+		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label" [hubOverflowTooltipShowDelay]="1500">{{
+			item().label
+		}}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
 		}
@@ -49,7 +51,9 @@
 			(click)="onRouteItemClick($event)"
 		>
 			<ng-container [ngTemplateOutlet]="glyph" />
-			<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
+			<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label" [hubOverflowTooltipShowDelay]="1500">{{
+				item().label
+			}}</span>
 			@if (item().badge) {
 				<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
 			}
@@ -91,7 +95,9 @@
 		(click)="onItemClick($event)"
 	>
 		<ng-container [ngTemplateOutlet]="glyph" />
-		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
+		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label" [hubOverflowTooltipShowDelay]="1500">{{
+			item().label
+		}}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
 		}
@@ -115,7 +121,9 @@
 		(click)="onItemClick($event)"
 	>
 		<ng-container [ngTemplateOutlet]="glyph" />
-		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label">{{ item().label }}</span>
+		<span class="hub-nav-item__label" [hubOverflowTooltip]="item().label" [hubOverflowTooltipShowDelay]="1500">{{
+			item().label
+		}}</span>
 		@if (item().badge) {
 			<span class="hub-nav-item__badge" [class]="item().badgeClass">{{ item().badge }}</span>
 		}
